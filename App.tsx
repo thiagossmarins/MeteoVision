@@ -10,7 +10,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <StatusBar barStyle={'dark-content'} />
       <Box flex={1} alignItems='center' justifyContent='center'>
-        <Text>Olá, MeteoVision!</Text>
+        <Text preset='mediumFontSize' bold italic>Olá, MeteoVision!</Text>
       </Box>
     </ThemeProvider>
   );
