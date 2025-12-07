@@ -17,7 +17,13 @@ export const theme = createTheme({
     rain: ['#628696', '#246368'],
   },
   spacing: {
-
+    s8: 8,
+    s10: 10,
+    s12: 12,
+    s16: 16,
+    s20: 20,
+    s24: 24,
+    s32: 32,
   },
   borderRadii: {
 
