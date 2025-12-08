@@ -2,12 +2,18 @@ import { createTheme } from "@shopify/restyle";
 
 
 const pallete = {
+  blue: '#2196F3',
+  gray: '#ccc',
   white: '#fff',
-  black: '#000'
+  black: '#000',
+  glass: 'rgba(255, 255, 255, 0.1)'
 }
 
 export const theme = createTheme({
   colors: {
+    glassBackground: pallete.glass,
+    humidityBox: pallete.gray,
+    humidity: pallete.blue,
     textColor: pallete.white,
   },
   gradients: {
@@ -24,9 +30,12 @@ export const theme = createTheme({
     s20: 20,
     s24: 24,
     s32: 32,
+    s48: 48,
+    s80: 80,
   },
   borderRadii: {
-
+    s8: 8,
+    s16: 16,
   },
   textVariants: {
     defaults: {}

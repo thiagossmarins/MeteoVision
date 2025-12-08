@@ -54,9 +54,9 @@ type TextVariants =
 
 // Podemos mapear interfaces usando o Record, passamos nosso tipo e depois as propriedades que queremos
 const $fontSize: Record<TextVariants, TextStyle> = {
-  bigFontSize: { fontSize: 80 },
-  mediumFontSize: { fontSize: 24 },
-  smallFontSize: { fontSize: 14 }
+  bigFontSize: { fontSize: 100, lineHeight: 100 },
+  mediumFontSize: { fontSize: 28 },
+  smallFontSize: { fontSize: 16 }
 }
 
 const $fontFamily = {
