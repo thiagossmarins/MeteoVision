@@ -5,6 +5,9 @@ import { Box } from "../../components/Box/Box";
 import { useLocation } from "../../hooks/useLocation";
 import { useWeather } from "../../hooks/useWeather";
 import { GlassBox } from "../../components/GlassBox/GlassBox";
+import { weatherCodeToText } from "../../utils/weatherCodeToText";
+import { UVIndexCard } from "../../components/UvIndexCard/UVIdexCard";
+import { uvIndexToText } from "../../utils/uvText";
 
 export function WeatherScreen() {
   const { location } = useLocation();
@@ -16,7 +19,7 @@ export function WeatherScreen() {
 
   return (
     <GradientScreen
-      gradient="clear"
+      gradient="rain"
     >
       <Box justifyContent="center" alignItems="center" flex={1}>
         <Text preset="mediumFontSize" light>Minha cidade</Text>
@@ -28,12 +31,15 @@ export function WeatherScreen() {
           ↑{weather?.daily.temperature_2m_max[0].toFixed(0)}{weather?.current_units.temperature_2m} /
           ↓{weather?.daily.temperature_2m_min[0].toFixed(0)}{weather?.current_units.temperature_2m}
         </Text>
+        <Text preset="smallFontSize">
+          {weather ? weatherCodeToText(weather.current.weather_code) : ""}
+        </Text>
       </Box>
 
       <Box mt="s16">
         <Text preset="smallFontSize">
-          Máximas de {weather?.daily.temperature_2m_max[0].toFixed(0)}{weather?.current_units.temperature_2m}
-          e mínimas de {weather?.daily.temperature_2m_min[0].toFixed(0)}{weather?.current_units.temperature_2m}.
+          Hoje faz máximas de {weather?.daily.temperature_2m_max[0].toFixed(0)}{weather?.current_units.temperature_2m} e 
+          mínimas de {weather?.daily.temperature_2m_min[0].toFixed(0)}{weather?.current_units.temperature_2m}.
           Sensação térmica de {weather?.current.apparent_temperature.toFixed(0)}{weather?.current_units.temperature_2m}
         </Text>
       </Box>
@@ -50,11 +56,8 @@ export function WeatherScreen() {
 
         <GlassBox flex={1}>
           <Text preset="smallFontSize" bold>UV</Text>
-
-          <Box alignItems="center">
-
-          </Box>
-
+          <Text preset="mediumFontSize">{weather ? uvIndexToText(weather?.daily.uv_index_max[0]) : "0"}</Text>
+          <UVIndexCard uvValue={weather?.daily.uv_index_max[0] ?? 0} />
         </GlassBox>
       </Box>
 

@@ -15,6 +15,7 @@ export const theme = createTheme({
     humidityBox: pallete.gray,
     humidity: pallete.blue,
     textColor: pallete.white,
+    textColorBlack: pallete.black,
   },
   gradients: {
     clear: ['#4A90E2', '#9FBDE0'],
@@ -23,6 +24,8 @@ export const theme = createTheme({
     rain: ['#628696', '#246368'],
   },
   spacing: {
+    s2: 2,
+    s4: 4,
     s8: 8,
     s10: 10,
     s12: 12,
@@ -36,6 +39,7 @@ export const theme = createTheme({
   borderRadii: {
     s8: 8,
     s16: 16,
+    s100: 100,
   },
   textVariants: {
     defaults: {}
