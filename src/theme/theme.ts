@@ -6,7 +6,7 @@ const pallete = {
   gray: '#ccc',
   white: '#fff',
   black: '#000',
-  glass: 'rgba(255, 255, 255, 0.1)'
+  glass: 'rgba(224, 224, 224, 0.2)'
 }
 
 export const theme = createTheme({

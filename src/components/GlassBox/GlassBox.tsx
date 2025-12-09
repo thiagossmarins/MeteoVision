@@ -1,8 +1,6 @@
 import React from "react";
-import { BlurView } from "@react-native-community/blur";
 import { BoxProps, createBox } from "@shopify/restyle";
 import { Theme } from '../../theme/Theme';
-import { StyleSheet } from "react-native";
 
 const GlassBoxBase = createBox<Theme>();
 
@@ -20,12 +18,6 @@ export function GlassBox({ children, ...rest }: GlassBoxProps) {
       paddingVertical="s8"
       {...rest}
     >
-      <BlurView
-        blurType="light"
-        style={StyleSheet.absoluteFill}
-        reducedTransparencyFallbackColor="white"
-      />
-
       {children}
     </GlassBoxBase>
   );

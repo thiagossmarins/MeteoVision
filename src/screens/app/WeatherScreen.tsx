@@ -49,12 +49,12 @@ export function WeatherScreen() {
         </GlassBox>
 
         <GlassBox flex={1}>
-          <Text preset="smallFontSize" bold>Umidade</Text>
-          <Text preset="mediumFontSize" textAlign="center">{weather?.hourly.relative_humidity_2m[0]}{weather?.hourly_units.relative_humidity_2m}</Text>
+          <Text preset="smallFontSize" bold>UV</Text>
 
-          <Box width={"100%"} height={16} backgroundColor="humidityBox" overflow="hidden" borderRadius="s8">
-            <Box height={"100%"} backgroundColor="humidity" borderRadius={"s8"} style={{ width: `${weather?.hourly.relative_humidity_2m[0] ?? 0}%` }}></Box>
+          <Box alignItems="center">
+
           </Box>
+
         </GlassBox>
       </Box>
 
@@ -70,7 +70,7 @@ export function WeatherScreen() {
         <GlassBox flex={1}>
           <Text preset="smallFontSize" bold>Pressão</Text>
           <Box alignItems="center">
-            
+
           </Box>
         </GlassBox>
       </Box>
