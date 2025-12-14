@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Geolocation from "react-native-geolocation-service";
 import { PermissionsAndroid, Platform } from "react-native"
+import { getCityByCoords } from "../api/location/getCityByCoords";
 
 type Location = {
   latitude?: number;
@@ -26,6 +27,7 @@ async function requestLocationPermission() {
 export function useLocation() {
   // estado que armazena a localização com o type definido no inicio do código
   const [location, setLocation] = useState<Location | null>(null);
+  const [city, setCity] = useState<string | null>(null);
   // aqui temos nosso loadingLocation que vai começar carregando e quando tivermos a localização ou se der erro para de carregar
   const [loadingLocation, setLoadindLocation] = useState(true);
   // aqui temos o locationError, que se der erro, vai retornar um erro pra gente
@@ -43,13 +45,29 @@ export function useLocation() {
           return;
         }
 
+        const mockLatitude = -22.3875557;
+        const mockLongitude = -44.97131032;
+
+        if (__DEV__) {
+          setLocation({ latitude: mockLatitude, longitude: mockLongitude });
+
+          const cityName = await getCityByCoords(mockLatitude, mockLongitude);
+          setCity(cityName);
+
+          setLoadindLocation(false);
+          return;
+        }
+
         Geolocation.getCurrentPosition(
-          (pos) => {
+          async (pos) => {
             // quando a localizaçõ for obtida, pega a latitude e longitude e jogamos no estado location
-            setLocation({
-              latitude: pos.coords.latitude,
-              longitude: pos.coords.longitude
-            });
+            const latitude = pos.coords.latitude;
+            const longitude = pos.coords.longitude;
+
+            setLocation({ latitude, longitude });
+
+            const cityName = await getCityByCoords(latitude, longitude);
+            setCity(cityName);
 
             // aqui quando tivermos nossa localização, o loading vai parar
             setLoadindLocation(false);
@@ -68,8 +86,8 @@ export function useLocation() {
             maximumAge: 10000,
           }
         );
-      // o catch captura qualquer erro inesperado que aconteça no try
-      } catch(e: any) {
+        // o catch captura qualquer erro inesperado que aconteça no try
+      } catch (e: any) {
         setLocationError(e.message);
         setLoadindLocation(false);
       }
@@ -81,5 +99,5 @@ export function useLocation() {
   }, [])
 
   // ESSENCIAL: retornar os dados
-  return { location, loadingLocation, locationError };
+  return { location, loadingLocation, locationError, city };
 }

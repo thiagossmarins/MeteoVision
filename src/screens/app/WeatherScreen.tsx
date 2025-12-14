@@ -11,7 +11,7 @@ import { uvIndexToText } from "../../utils/uvText";
 import { ScrollView } from "react-native";
 
 export function WeatherScreen() {
-  const { location } = useLocation();
+  const { location, city } = useLocation();
 
   const { weather, dailyForecast } = useWeather(
     location?.latitude,
@@ -23,10 +23,8 @@ export function WeatherScreen() {
       gradient="rain"
     >
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-
-
-        <Box justifyContent="center" alignItems="center" flex={1}>
-          <Text preset="mediumFontSize" light>Minha cidade</Text>
+        <Box justifyContent="center" alignItems="center" flex={1} height={400}>
+          <Text preset="mediumFontSize" light>{city ?? 'Carregando...'}</Text>
           <Box alignItems="flex-start" justifyContent="center" flexDirection="row">
             <Text preset="bigFontSize" light>{weather?.current.temperature_2m.toFixed(0)}</Text>
             <Text preset="mediumFontSize">{weather?.current_units.temperature_2m}</Text>
@@ -50,6 +48,7 @@ export function WeatherScreen() {
 
         <GlassBox mt="s16">
           <Text preset="smallFontSize" bold>Próximos dias:</Text>
+          {/* Percorre cada dia da previsão (dailyForecast) usando map, e para cada item cria um bloco visual (Box). Retorna essa lista de componentes, mantendo a ordem original.  */}
           {dailyForecast.map((day, index) => (
             <Box
               key={index}
@@ -72,7 +71,7 @@ export function WeatherScreen() {
         </GlassBox>
 
         <Box mt="s16" flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap="s16">
-          <GlassBox flex={1}>
+          <GlassBox flex={1} height={200}>
             <Text preset="smallFontSize" bold>Umidade</Text>
             <Text preset="mediumFontSize" textAlign="center">{weather?.hourly.relative_humidity_2m[0]}{weather?.hourly_units.relative_humidity_2m}</Text>
 
@@ -81,15 +80,15 @@ export function WeatherScreen() {
             </Box>
           </GlassBox>
 
-          <GlassBox flex={1}>
+          <GlassBox flex={1} height={200}>
             <Text preset="smallFontSize" bold>UV</Text>
-            <Text preset="mediumFontSize">{weather ? uvIndexToText(weather?.daily.uv_index_max[0]) : "0"}</Text>
+            <Text preset="smallFontSize" light>{weather ? uvIndexToText(weather?.daily.uv_index_max[0]) : "0"}</Text>
             <UVIndexCard uvValue={weather?.daily.uv_index_max[0] ?? 0} />
           </GlassBox>
         </Box>
 
         <Box mt="s16" flexDirection="row" justifyContent="space-between" gap="s16">
-          <GlassBox flex={1}>
+          <GlassBox flex={1} height={200}>
             <Text preset="smallFontSize" bold>Vento</Text>
             <Box alignItems="center">
               <Text preset="mediumFontSize">{weather?.current.wind_speed_10m.toFixed(0)}</Text>
@@ -97,7 +96,7 @@ export function WeatherScreen() {
             </Box>
           </GlassBox>
 
-          <GlassBox flex={1}>
+          <GlassBox flex={1} height={200}>
             <Text preset="smallFontSize" bold>Pressão</Text>
             <Box alignItems="center">
 
