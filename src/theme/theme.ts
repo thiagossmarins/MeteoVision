@@ -20,7 +20,7 @@ export const theme = createTheme({
   gradients: {
     clear: ['#4A90E2', '#9FBDE0'],
     clouds: ['#a0a0a0ff', '#535353ff'],
-    night: ['#141E30', '#243B55'],
+    night: ['#061735', '#0F1622'],
     rain: ['#628696', '#246368'],
   },
   spacing: {

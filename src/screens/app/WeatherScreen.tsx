@@ -8,6 +8,7 @@ import { GlassBox } from "../../components/GlassBox/GlassBox";
 import { weatherCodeToText } from "../../utils/weatherCodeToText";
 import { UVIndexCard } from "../../components/UvIndexCard/UVIdexCard";
 import { uvIndexToText } from "../../utils/uvText";
+import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclination";
 import { ScrollView } from "react-native";
 
 export function WeatherScreen() {
@@ -20,10 +21,10 @@ export function WeatherScreen() {
 
   return (
     <GradientScreen
-      gradient="rain"
+      gradient="night"
     >
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <Box justifyContent="center" alignItems="center" flex={1} height={400}>
+        <Box justifyContent="center" alignItems="center" flex={1} height={450}>
           <Text preset="mediumFontSize" light>{city ?? 'Carregando...'}</Text>
           <Box alignItems="flex-start" justifyContent="center" flexDirection="row">
             <Text preset="bigFontSize" light>{weather?.current.temperature_2m.toFixed(0)}</Text>
@@ -47,7 +48,7 @@ export function WeatherScreen() {
         </Box>
 
         <GlassBox mt="s16">
-          <Text preset="smallFontSize" bold>Próximos dias:</Text>
+          <Text preset="smallFontSize" bold mb="s4">Próximos dias:</Text>
           {/* Percorre cada dia da previsão (dailyForecast) usando map, e para cada item cria um bloco visual (Box). Retorna essa lista de componentes, mantendo a ordem original.  */}
           {dailyForecast.map((day, index) => (
             <Box
@@ -71,7 +72,7 @@ export function WeatherScreen() {
         </GlassBox>
 
         <Box mt="s16" flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap="s16">
-          <GlassBox flex={1} height={200}>
+          <GlassBox flex={1} height={175}>
             <Text preset="smallFontSize" bold>Umidade</Text>
             <Text preset="mediumFontSize" textAlign="center">{weather?.hourly.relative_humidity_2m[0]}{weather?.hourly_units.relative_humidity_2m}</Text>
 
@@ -80,7 +81,7 @@ export function WeatherScreen() {
             </Box>
           </GlassBox>
 
-          <GlassBox flex={1} height={200}>
+          <GlassBox flex={1} height={175}>
             <Text preset="smallFontSize" bold>UV</Text>
             <Text preset="smallFontSize" light>{weather ? uvIndexToText(weather?.daily.uv_index_max[0]) : "0"}</Text>
             <UVIndexCard uvValue={weather?.daily.uv_index_max[0] ?? 0} />
@@ -88,7 +89,7 @@ export function WeatherScreen() {
         </Box>
 
         <Box mt="s16" flexDirection="row" justifyContent="space-between" gap="s16">
-          <GlassBox flex={1} height={200}>
+          <GlassBox flex={1} height={175}>
             <Text preset="smallFontSize" bold>Vento</Text>
             <Box alignItems="center">
               <Text preset="mediumFontSize">{weather?.current.wind_speed_10m.toFixed(0)}</Text>
@@ -96,23 +97,32 @@ export function WeatherScreen() {
             </Box>
           </GlassBox>
 
-          <GlassBox flex={1} height={200}>
+          <GlassBox flex={1} height={175}>
             <Text preset="smallFontSize" bold>Pressão</Text>
             <Box alignItems="center">
-
+              {/* <Text preset="smallFontSize">{weather?.hourly.pressure_msl}</Text> */}
             </Box>
           </GlassBox>
         </Box>
 
-        <GlassBox flexDirection="row" alignItems="center" justifyContent="space-between" mt="s16">
-          <Box>
-            <Text preset="smallFontSize" bold>Nascer do sol</Text>
-            <Text preset="mediumFontSize">{weather?.daily.sunrise[0].substring(11)}</Text>
-          </Box>
+        <GlassBox justifyContent="center" alignItems="center" flexDirection="column" mt="s16" >
+          {weather?.daily.sunrise[0] && weather?.daily.sunset[0] && (
+            <SolarDeclination
+              sunrise={weather.daily.sunrise[0]}
+              sunset={weather.daily.sunset[0]}
+              testMode={true}
+            />
+          )}
+          <Box width={"100%"} alignItems="flex-start" flexDirection="row" gap="s32" justifyContent="center">
+            <Box alignItems="center" width={"50%"}>
+              <Text preset="smallFontSize" bold>Nascer do sol</Text>
+              <Text preset="mediumFontSize">{weather?.daily.sunrise[0].substring(11)}</Text>
+            </Box>
 
-          <Box>
-            <Text preset="smallFontSize" bold>Pôr-do-sol</Text>
-            <Text preset="mediumFontSize">{weather?.daily.sunset[0].substring(11)}</Text>
+            <Box alignItems="center" width={"50%"}>
+              <Text preset="smallFontSize" bold>Pôr-do-sol</Text>
+              <Text preset="mediumFontSize">{weather?.daily.sunset[0].substring(11)}</Text>
+            </Box>
           </Box>
         </GlassBox>
 

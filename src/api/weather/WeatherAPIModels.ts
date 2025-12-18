@@ -39,6 +39,9 @@ export interface WeatherData {
     showers: number[];
     rain: number[];
     dew_point_2m: number[];
+    pressure_msl: number[];
+    surface_pressure: number[];
+    visibility: number[];
   }
   hourly_units: {
     time: string,
