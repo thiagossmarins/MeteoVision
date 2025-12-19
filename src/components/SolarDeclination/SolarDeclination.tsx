@@ -61,34 +61,42 @@ export function SolarDeclination({
   // Update current position based on current time
   useEffect(() => {
     const updatePosition = () => {
+      if (sunriseMinutes === undefined || sunsetMinutes === undefined) return;
+
       const now = new Date();
       let currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const totalDayMinutes = sunsetMinutes - sunriseMinutes;
 
       // Test mode: simula o movimento do sol ao longo do dia
       if (testMode) {
-        const totalDayMinutes = sunsetMinutes - sunriseMinutes;
         // Cria uma animação contínua de 10 segundos para o dia todo
         const elapsed = (Date.now() % 10000) / 10000;
         currentMinutes = sunriseMinutes + elapsed * totalDayMinutes;
       }
 
-      if (currentMinutes >= sunriseMinutes && currentMinutes <= sunsetMinutes) {
-        const totalDayMinutes = sunsetMinutes - sunriseMinutes;
-        const progress = (currentMinutes - sunriseMinutes) / totalDayMinutes;
-
-        // Calculate position on the curve
-        const altitude = Math.sin(progress * Math.PI);
-        const x = padding + progress * plotWidth;
-        const y = padding + plotHeight - altitude * plotHeight;
-
-        setCurrentPos({ x, y, progress });
-      } else {
-        setCurrentPos(null);
+      // Sempre mostrar a posição do sol, mesmo que seja noite
+      // Se for antes do nascer, mostra no início da curva
+      // Se for depois do pôr, mostra no final da curva
+      let adjustedMinutes = currentMinutes;
+      
+      if (currentMinutes < sunriseMinutes) {
+        adjustedMinutes = sunriseMinutes;
+      } else if (currentMinutes > sunsetMinutes) {
+        adjustedMinutes = sunsetMinutes;
       }
+
+      const progress = (adjustedMinutes - sunriseMinutes) / totalDayMinutes;
+
+      // Calculate position on the curve
+      const altitude = Math.sin(progress * Math.PI);
+      const x = padding + progress * plotWidth;
+      const y = padding + plotHeight - altitude * plotHeight;
+
+      setCurrentPos({ x, y, progress });
     };
 
     updatePosition();
-    const interval = setInterval(updatePosition, 1000); // Update every second for smooth movement
+    const interval = setInterval(updatePosition, 500); // Update every 500ms for smooth movement
 
     return () => clearInterval(interval);
   }, [sunriseMinutes, sunsetMinutes, plotWidth, plotHeight, padding, testMode]);

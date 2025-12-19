@@ -22,6 +22,8 @@ export const theme = createTheme({
     clouds: ['#a0a0a0ff', '#535353ff'],
     night: ['#061735', '#0F1622'],
     rain: ['#628696', '#246368'],
+    snow: ['#e8f0f7', '#b8d4e8'],
+    storm: ['#3a3a52', '#1a1a2e'],
   },
   spacing: {
     s2: 2,

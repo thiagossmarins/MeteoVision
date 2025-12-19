@@ -10,8 +10,8 @@ export function useWeather(latitude?: number, longitude?: number) {
   const [dailyForecast, setDailyForecast] = useState<any[]>([]);
 
   // tive que fazer um mock porque meu emulador está meio bugado e não está pegando a localização
-  const lat = __DEV__ ? -22.3875557 : latitude;
-  const lon = __DEV__ ? -44.97131032 : longitude;
+  const lat = __DEV__ ? -33.889613 : latitude;
+  const lon = __DEV__ ? -151.214281 : longitude;
 
   useEffect(() => {
     if (!lat || !lon) return;

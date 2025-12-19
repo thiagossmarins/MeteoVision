@@ -4,6 +4,7 @@ import { Text } from "../../components/Text/Text";
 import { Box } from "../../components/Box/Box";
 import { useLocation } from "../../hooks/useLocation";
 import { useWeather } from "../../hooks/useWeather";
+import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
 import { GlassBox } from "../../components/GlassBox/GlassBox";
 import { weatherCodeToText } from "../../utils/weatherCodeToText";
 import { UVIndexCard } from "../../components/UvIndexCard/UVIdexCard";
@@ -19,9 +20,11 @@ export function WeatherScreen() {
     location?.longitude
   );
 
+  const currentTheme = useDynamicWeatherTheme(weather);
+
   return (
     <GradientScreen
-      gradient="night"
+      gradient={currentTheme.gradient}
     >
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <Box justifyContent="center" alignItems="center" flex={1} height={450}>
@@ -64,8 +67,8 @@ export function WeatherScreen() {
                   <Text preset="smallFontSize" mr="s4">☔</Text>
                   <Text width={50} preset="smallFontSize">{day.avgRain}{weather?.hourly_units.precipitation_probability}</Text>
                 </Box>
-                <Text width={60} preset="smallFontSize">↑{day.maxTemp}{weather?.current_units.temperature_2m}</Text>
-                <Text width={60} preset="smallFontSize">↓{day.minTemp}{weather?.current_units.temperature_2m}</Text>
+                <Text width={65} preset="smallFontSize">↑{day.maxTemp}{weather?.current_units.temperature_2m}</Text>
+                <Text width={65} preset="smallFontSize">↓{day.minTemp}{weather?.current_units.temperature_2m}</Text>
               </Box>
             </Box>
           ))}
@@ -110,7 +113,7 @@ export function WeatherScreen() {
             <SolarDeclination
               sunrise={weather.daily.sunrise[0]}
               sunset={weather.daily.sunset[0]}
-              testMode={true}
+              // testMode={true}
             />
           )}
           <Box width={"100%"} alignItems="flex-start" flexDirection="row" gap="s32" justifyContent="center">
@@ -120,7 +123,7 @@ export function WeatherScreen() {
             </Box>
 
             <Box alignItems="center" width={"50%"}>
-              <Text preset="smallFontSize" bold>Pôr-do-sol</Text>
+              <Text preset="smallFontSize" bold>Pôr do sol</Text>
               <Text preset="mediumFontSize">{weather?.daily.sunset[0].substring(11)}</Text>
             </Box>
           </Box>

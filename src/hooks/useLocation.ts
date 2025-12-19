@@ -45,8 +45,8 @@ export function useLocation() {
           return;
         }
 
-        const mockLatitude = -22.3875557;
-        const mockLongitude = -44.97131032;
+        const mockLatitude = -33.889613;
+        const mockLongitude = 151.214281; 
 
         if (__DEV__) {
           setLocation({ latitude: mockLatitude, longitude: mockLongitude });
