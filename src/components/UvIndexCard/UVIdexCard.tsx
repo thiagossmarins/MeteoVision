@@ -20,7 +20,7 @@ function interpolateColor(color1: string, color2: string, factor: number) {
 
   const r = Math.round(r1 + (r2 - r1) * factor);
   const g = Math.round(g1 + (g2 - g1) * factor);
-  const b = Math.round(b1 + (b2 - g1) * factor);
+  const b = Math.round(b1 + (b2 - b1) * factor);
 
   return `rgb(${r}, ${g}, ${b})`;
 }
@@ -98,7 +98,7 @@ export function UVIndexCard({ uvValue }: UVIndexCardProps) {
         alignItems="center"
         justifyContent="center"
       >
-        <Text preset="smallFontSize" lineHeight={16} color="textColor" mr="s4">
+        <Text preset="titleBoxFontSize" lineHeight={16} color="textColor" textAlign="center" width="100%" mr="s4">
           {uvValue.toFixed(0)}
         </Text>
       </Box>
