@@ -50,13 +50,15 @@ function getFontFamily(light?: boolean, regular?: boolean, medium?: boolean, bol
 type TextVariants =
   | "bigFontSize"
   | "mediumFontSize"
-  | "smallFontSize";
+  | "smallFontSize"
+  | "titleBoxFontSize";
 
 // Podemos mapear interfaces usando o Record, passamos nosso tipo e depois as propriedades que queremos
 const $fontSize: Record<TextVariants, TextStyle> = {
   bigFontSize: { fontSize: 100, lineHeight: 100 },
   mediumFontSize: { fontSize: 24 },
-  smallFontSize: { fontSize: 16 }
+  smallFontSize: { fontSize: 16 },
+  titleBoxFontSize: { fontSize: 14 }
 }
 
 const $fontFamily = {

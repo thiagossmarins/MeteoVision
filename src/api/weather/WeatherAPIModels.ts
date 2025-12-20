@@ -48,8 +48,11 @@ export interface WeatherData {
     temperature_2m: string,
     relative_humidity_2m: string,
     precipitation_probability: string,
+    pressure_msl: string,
+    surface_pressure: string,
     showers: string,
     rain: string,
     dew_point_2m: string
+    visibility: string
   },
 }

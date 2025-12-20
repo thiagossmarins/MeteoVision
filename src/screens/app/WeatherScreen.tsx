@@ -10,17 +10,29 @@ import { weatherCodeToText } from "../../utils/weatherCodeToText";
 import { UVIndexCard } from "../../components/UvIndexCard/UVIdexCard";
 import { uvIndexToText } from "../../utils/uvText";
 import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclination";
-import { ScrollView } from "react-native";
+import { ActivityIndicator, ScrollView } from "react-native";
 
 export function WeatherScreen() {
   const { location, city } = useLocation();
 
-  const { weather, dailyForecast } = useWeather(
+  const { weather, dailyForecast, loadingWeather } = useWeather(
     location?.latitude,
     location?.longitude
   );
 
   const currentTheme = useDynamicWeatherTheme(weather);
+
+  if (loadingWeather){
+    return (
+      <GradientScreen
+        gradient={currentTheme.gradient}
+      >
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <ActivityIndicator color={"#fff"} size={50} />
+        </Box>
+      </GradientScreen>
+    );
+  }
 
   return (
     <GradientScreen
@@ -51,7 +63,6 @@ export function WeatherScreen() {
         </Box>
 
         <GlassBox mt="s16">
-          <Text preset="smallFontSize" bold mb="s4">Próximos dias:</Text>
           {/* Percorre cada dia da previsão (dailyForecast) usando map, e para cada item cria um bloco visual (Box). Retorna essa lista de componentes, mantendo a ordem original.  */}
           {dailyForecast.map((day, index) => (
             <Box
@@ -76,34 +87,57 @@ export function WeatherScreen() {
 
         <Box mt="s16" flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap="s16">
           <GlassBox flex={1} height={175}>
-            <Text preset="smallFontSize" bold>Umidade</Text>
-            <Text preset="mediumFontSize" textAlign="center">{weather?.hourly.relative_humidity_2m[0]}{weather?.hourly_units.relative_humidity_2m}</Text>
+            <Text preset="titleBoxFontSize" bold>Umidade</Text>
+            
+            <Box alignItems="center" justifyContent="flex-end" height={"80%"}>
+              <Text preset="mediumFontSize" textAlign="center" medium>{weather?.hourly.relative_humidity_2m[0]}{weather?.hourly_units.relative_humidity_2m}</Text>
 
-            <Box width={"100%"} height={16} backgroundColor="humidityBox" overflow="hidden" borderRadius="s8">
-              <Box height={"100%"} backgroundColor="humidity" borderRadius={"s8"} style={{ width: `${weather?.hourly.relative_humidity_2m[0] ?? 0}%` }}></Box>
+              <Box width={"100%"} height={16} backgroundColor="humidityBox" overflow="hidden" borderRadius="s8">
+                <Box height={"100%"} backgroundColor="humidity" borderRadius={"s8"} style={{ width: `${weather?.hourly.relative_humidity_2m[0] ?? 0}%` }}></Box>
+              </Box>
             </Box>
           </GlassBox>
 
           <GlassBox flex={1} height={175}>
-            <Text preset="smallFontSize" bold>UV</Text>
-            <Text preset="smallFontSize" light>{weather ? uvIndexToText(weather?.daily.uv_index_max[0]) : "0"}</Text>
-            <UVIndexCard uvValue={weather?.daily.uv_index_max[0] ?? 0} />
+            <Text preset="titleBoxFontSize" bold>Índice UV</Text>
+            <Text preset="smallFontSize" light>{weather ? uvIndexToText(Math.max(...weather.daily.uv_index_max)) : "0"}</Text>
+            
+            <Box alignItems="center" justifyContent="flex-end" height={"68%"}>
+              <UVIndexCard uvValue={weather ? Math.max(...weather.daily.uv_index_max) : 0} />
+            </Box>
           </GlassBox>
         </Box>
 
         <Box mt="s16" flexDirection="row" justifyContent="space-between" gap="s16">
           <GlassBox flex={1} height={175}>
-            <Text preset="smallFontSize" bold>Vento</Text>
+            <Text preset="titleBoxFontSize" bold>Vento</Text>
             <Box alignItems="center" justifyContent="center" height={"80%"}>
-              <Text preset="mediumFontSize">{weather?.current.wind_speed_10m.toFixed(0)}</Text>
-              <Text preset="mediumFontSize">{weather?.current_units.wind_speed_10m}</Text>
+              <Text preset="mediumFontSize" medium>{weather?.current.wind_speed_10m.toFixed(0)}</Text>
+              <Text preset="mediumFontSize" medium>{weather?.current_units.wind_speed_10m}</Text>
             </Box>
           </GlassBox>
 
           <GlassBox flex={1} height={175}>
-            <Text preset="smallFontSize" bold>Pressão</Text>
-            <Box alignItems="center">
-              {/* <Text preset="smallFontSize">{weather?.hourly.pressure_msl}</Text> */}
+            <Text preset="titleBoxFontSize" bold>Pressão</Text>
+            <Box alignItems="center" justifyContent="center" height={"80%"}>
+              <Text preset="mediumFontSize" medium>{weather?.hourly.pressure_msl ? Math.max(...weather.hourly.pressure_msl).toFixed(0) : '-'}</Text>
+              <Text preset="mediumFontSize" medium>{weather?.hourly_units.pressure_msl}</Text>
+            </Box>
+          </GlassBox>
+        </Box>
+
+        <Box mt="s16" flexDirection="row" justifyContent="space-between" gap="s16">
+          <GlassBox flex={1} height={175}>
+            <Text preset="titleBoxFontSize" bold>Visibilidade</Text>
+            <Box alignItems="flex-start" justifyContent="flex-end" height={"80%"}>
+              <Text preset="mediumFontSize" medium>{weather?.hourly.visibility ? Math.max(...weather.hourly.visibility).toFixed(0) : '-'}{weather?.hourly_units.visibility}</Text>
+            </Box>
+          </GlassBox>
+
+          <GlassBox flex={1} height={175}>
+            <Text preset="titleBoxFontSize" bold>Ponto de orvalho</Text>
+            <Box alignItems="flex-start" justifyContent="flex-end" height={"80%"}>
+              <Text preset="mediumFontSize" medium>{weather?.hourly.dew_point_2m ? Math.max(...weather.hourly.dew_point_2m).toFixed(0) : '-'}{weather?.hourly_units.dew_point_2m}</Text>
             </Box>
           </GlassBox>
         </Box>

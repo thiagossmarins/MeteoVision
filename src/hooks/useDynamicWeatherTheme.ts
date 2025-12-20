@@ -6,7 +6,7 @@ export function useDynamicWeatherTheme(weather: WeatherData | null | undefined) 
   const theme = useMemo(() => {
     if (!weather) {
       return {
-        gradient: "night" as const,
+        gradient: "clear" as const,
         name: "Carregando...",
       };
     }
