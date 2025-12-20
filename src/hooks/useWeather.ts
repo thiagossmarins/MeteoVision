@@ -9,22 +9,29 @@ export function useWeather(latitude?: number, longitude?: number) {
   const [weatherError, setWeatherError] = useState<string | null>(null);
   const [dailyForecast, setDailyForecast] = useState<any[]>([]);
 
-  // tive que fazer um mock porque meu emulador está meio bugado e não está pegando a localização
-  const lat = __DEV__ ? -33.889613 : latitude;
-  const lon = __DEV__ ? -151.214281 : longitude;
+  // Em desenvolvimento usa mock, em produção tenta usar localização real
+  const lat = __DEV__ ? -22.3886 : latitude;
+  const lon = __DEV__ ? -44.9631 : longitude;
 
   useEffect(() => {
-    if (!lat || !lon) return;
+    if (!lat || !lon) {
+      setLoadingWeather(false);
+      return;
+    }
 
     setLoadingWeather(true);
 
     async function load() {
       try {
+        console.log(`Buscando clima para: lat=${lat}, lon=${lon}`);
         const data = await getWeatherByCoords(lat, lon);
         setWeather(data);
         const forecast = getDailyForecast(data.hourly);
         setDailyForecast(forecast);
+        setWeatherError(null);
+        console.log("Clima carregado com sucesso");
       } catch (e: any) {
+        console.error("Erro ao carregar clima:", e.message);
         setWeatherError(e.message);
       } finally {
         setLoadingWeather(false);

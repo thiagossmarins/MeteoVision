@@ -45,8 +45,8 @@ export function useLocation() {
           return;
         }
 
-        const mockLatitude = -33.889613;
-        const mockLongitude = 151.214281; 
+        const mockLatitude = -22.3886;
+        const mockLongitude = -44.9631; 
 
         if (__DEV__) {
           setLocation({ latitude: mockLatitude, longitude: mockLongitude });
@@ -72,16 +72,23 @@ export function useLocation() {
             // aqui quando tivermos nossa localização, o loading vai parar
             setLoadindLocation(false);
           },
-          (error) => {
+          async (error) => {
             // se o usuário negou permissão, ou GPS não conseguiu pegar a localização, ou deu erro de timeout, cai aqui
-            setLocationError(error.message);
+            console.warn("Erro ao pegar localização real, usando fallback:", error.message);
+            
+            // FALLBACK: usar localização mock se o GPS falhar
+            setLocation({ latitude: mockLatitude, longitude: mockLongitude });
+            const cityName = await getCityByCoords(mockLatitude, mockLongitude);
+            setCity(cityName);
+            
+            setLocationError(`GPS indisponível, usando localização padrão`);
             setLoadindLocation(false);
           },
           {
             // prioriza GPS, mas pode usar outras fontes combinadas (rede, torres de celular)
             enableHighAccuracy: true,
-            // tempo máximo para buscar a localização 1.5s
-            timeout: 1500,
+            // tempo máximo para buscar a localização
+            timeout: 15000,
             // permite usar localização cacheada, até 10s atrás
             maximumAge: 10000,
           }

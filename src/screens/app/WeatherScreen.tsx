@@ -94,7 +94,7 @@ export function WeatherScreen() {
         <Box mt="s16" flexDirection="row" justifyContent="space-between" gap="s16">
           <GlassBox flex={1} height={175}>
             <Text preset="smallFontSize" bold>Vento</Text>
-            <Box alignItems="center">
+            <Box alignItems="center" justifyContent="center" height={"80%"}>
               <Text preset="mediumFontSize">{weather?.current.wind_speed_10m.toFixed(0)}</Text>
               <Text preset="mediumFontSize">{weather?.current_units.wind_speed_10m}</Text>
             </Box>
@@ -113,7 +113,7 @@ export function WeatherScreen() {
             <SolarDeclination
               sunrise={weather.daily.sunrise[0]}
               sunset={weather.daily.sunset[0]}
-              // testMode={true}
+              testMode={false}
             />
           )}
           <Box width={"100%"} alignItems="flex-start" flexDirection="row" gap="s32" justifyContent="center">
