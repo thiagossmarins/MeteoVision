@@ -42,6 +42,7 @@ export interface WeatherData {
     pressure_msl: number[];
     surface_pressure: number[];
     visibility: number[];
+    weather_code: number[];
   }
   hourly_units: {
     time: string,
