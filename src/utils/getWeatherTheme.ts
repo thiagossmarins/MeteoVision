@@ -13,14 +13,14 @@ export function getWeatherTheme(weatherCode: number, isDay: number): WeatherThem
     };
   }
 
-  if (weatherCode === 0 || weatherCode === 1) {
+  if (weatherCode === 0 || weatherCode === 1 || weatherCode === 2) {
     return {
       gradient: "clear",
       name: "Céu Limpo",
     };
   }
 
-  if (weatherCode === 2 || weatherCode === 3) {
+  if (weatherCode === 3) {
     return {
       gradient: "clouds",
       name: "Nublado",

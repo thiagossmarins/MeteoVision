@@ -13,6 +13,9 @@ import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclina
 import { HourlyForecast } from "../../components/HourlyForecast/HourlyForecast";
 import { DailyForecast } from "../../components/DailyForecast/DailyForecast";
 import { ActivityIndicator, ScrollView } from "react-native";
+import { HumidityIcon } from "../../assets/icons/HumidityIcon";
+import { SunnyIcon } from "../../assets/icons/SunnyIcon";
+import { humidityToText } from "../../utils/humidityText";
 
 export function WeatherScreen() {
   const { location, city } = useLocation();
@@ -72,19 +75,28 @@ export function WeatherScreen() {
 
         <Box mt="s16" flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap="s16">
           <GlassBox flex={1} height={175}>
-            <Text preset="titleBoxFontSize" bold>Umidade</Text>
+            <Box flexDirection="row" alignItems="center" gap="s4" mb="s8">
+              <HumidityIcon />
+              <Text preset="titleBoxFontSize" bold>Umidade</Text>
+            </Box>
+            <Text preset="smallFontSize" light>
+              {humidityToText(weather?.hourly.relative_humidity_2m ? Math.max(...weather.hourly.relative_humidity_2m) : 0)}
+            </Text>
 
-            <Box alignItems="center" justifyContent="flex-end" height={"80%"}>
-              <Text preset="mediumFontSize" textAlign="center" medium>{weather?.hourly.relative_humidity_2m[0]}{weather?.hourly_units.relative_humidity_2m}</Text>
+            <Box alignItems="center" justifyContent="flex-end" height={"66%"}>
+              <Text preset="mediumFontSize" textAlign="center" medium>{weather?.hourly.relative_humidity_2m ? Math.max(...weather.hourly.relative_humidity_2m) : '-'}{weather?.hourly_units.relative_humidity_2m}</Text>
 
               <Box width={"100%"} height={16} backgroundColor="humidityBox" overflow="hidden" borderRadius="s8">
-                <Box height={"100%"} backgroundColor="humidity" borderRadius={"s8"} style={{ width: `${weather?.hourly.relative_humidity_2m[0] ?? 0}%` }} />
+                <Box height={"100%"} backgroundColor="humidity" borderRadius={"s8"} style={{ width: `${weather?.hourly.relative_humidity_2m ? Math.max(...weather.hourly.relative_humidity_2m) : 0}%` }} />
               </Box>
             </Box>
           </GlassBox>
 
           <GlassBox flex={1} height={175}>
-            <Text preset="titleBoxFontSize" bold>Índice UV</Text>
+            <Box flexDirection="row" alignItems="center" gap="s4" mb="s8">
+              <SunnyIcon />
+              <Text preset="titleBoxFontSize" bold>Índice UV</Text>
+            </Box>
             <Text preset="smallFontSize" light>{weather ? uvIndexToText(Math.max(...weather.daily.uv_index_max)) : "0"}</Text>
 
             <Box alignItems="center" justifyContent="flex-end" height={"68%"}>

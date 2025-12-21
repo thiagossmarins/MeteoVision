@@ -18,7 +18,7 @@ export const theme = createTheme({
     textColorBlack: pallete.black,
   },
   gradients: {
-    clear: ['#4A90E2', '#9FBDE0'],
+    clear: ['#9FBDE0', '#4A90E2'],
     clouds: ['#a0a0a0ff', '#535353ff'],
     night: ['#061735', '#0F1622'],
     rain: ['#628696', '#246368'],
