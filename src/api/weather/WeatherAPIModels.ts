@@ -39,14 +39,21 @@ export interface WeatherData {
     showers: number[];
     rain: number[];
     dew_point_2m: number[];
+    pressure_msl: number[];
+    surface_pressure: number[];
+    visibility: number[];
+    weather_code: number[];
   }
   hourly_units: {
     time: string,
     temperature_2m: string,
     relative_humidity_2m: string,
     precipitation_probability: string,
+    pressure_msl: string,
+    surface_pressure: string,
     showers: string,
     rain: string,
     dew_point_2m: string
+    visibility: string
   },
 }
