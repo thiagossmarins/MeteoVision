@@ -71,10 +71,6 @@ export function SolarDeclination({
       const totalDayMinutes = sunsetMinutes - sunriseMinutes;
 
       // Log para debug
-      console.log(`[SolarDeclination] Hora atual: ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`);
-      console.log(`[SolarDeclination] Nascer: ${Math.floor(sunriseMinutes / 60)}:${String(sunriseMinutes % 60).padStart(2, '0')}`);
-      console.log(`[SolarDeclination] Pôr: ${Math.floor(sunsetMinutes / 60)}:${String(sunsetMinutes % 60).padStart(2, '0')}`);
-      console.log(`[SolarDeclination] Minutos atuais: ${currentMinutes}, Nascer: ${sunriseMinutes}, Pôr: ${sunsetMinutes}`);
 
       // Test mode: simula o movimento do sol ao longo do dia
       if (testMode) {
@@ -100,7 +96,6 @@ export function SolarDeclination({
       const x = padding + progress * plotWidth;
       const y = padding + plotHeight - altitude * plotHeight;
 
-      console.log(`[SolarDeclination] Sol visível! Progress: ${(progress * 100).toFixed(1)}%`);
       setCurrentPos({ x, y, progress });
     };
 

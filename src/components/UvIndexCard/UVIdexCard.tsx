@@ -94,11 +94,11 @@ export function UVIndexCard({ uvValue }: UVIndexCardProps) {
           backgroundColor: ballColor,
         }}
         borderWidth={3}
-        borderColor={"textColor"}
+        borderColor={"white"}
         alignItems="center"
         justifyContent="center"
       >
-        <Text preset="titleBoxFontSize" lineHeight={16} color="textColor" textAlign="center" width="100%" mr="s4">
+        <Text preset="titleBoxFontSize" lineHeight={16} color="white" textAlign="center" width="100%" mr="s4">
           {uvValue.toFixed(0)}
         </Text>
       </Box>

@@ -12,13 +12,15 @@ import { uvIndexToText } from "../../utils/uvText";
 import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclination";
 import { HourlyForecast } from "../../components/HourlyForecast/HourlyForecast";
 import { DailyForecast } from "../../components/DailyForecast/DailyForecast";
-import { ActivityIndicator, ScrollView } from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import { HumidityIcon } from "../../assets/icons/HumidityIcon";
 import { SunnyIcon } from "../../assets/icons/SunnyIcon";
 import { humidityToText } from "../../utils/humidityText";
+import { useNavigation } from "@react-navigation/native";
 
 export function WeatherScreen() {
   const { location, city } = useLocation();
+  const navigation = useNavigation<any>();
 
   const { weather, dailyForecast, loadingWeather } = useWeather(
     location?.latitude,
@@ -44,6 +46,11 @@ export function WeatherScreen() {
       gradient={currentTheme.gradient}
     >
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+
+        <TouchableOpacity onPress={() => { navigation.navigate('Map') }}>
+          <Text preset="mediumFontSize" light textAlign="center" mt="s16">🔍</Text>
+        </TouchableOpacity>
+
         <Text preset="mediumFontSize" medium textAlign="center" mt="s20">{city ?? 'Carregando...'}</Text>
         <Box justifyContent="center" alignItems="center" flex={1} height={450}>
           <Box alignItems="flex-start" justifyContent="center" flexDirection="row">
