@@ -23,7 +23,7 @@ export function Text({ children, preset = "smallFontSize", light, regular, mediu
     /* ...restyleTextProps serve para repassar todas as props restantes para o componente filho
     por exemplo, quando formos passas color, a gente não precisa tipar, porque isso foi para o ...restyleTextProps
     */
-    <RestyleText color="textColor" style={[$fontSize[preset], { fontFamily }, style]} {...restyleTextProps}> {children}</RestyleText >
+    <RestyleText color="white" style={[$fontSize[preset], { fontFamily }, style]} {...restyleTextProps}> {children}</RestyleText >
   )
 }
 

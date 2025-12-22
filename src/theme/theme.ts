@@ -14,8 +14,8 @@ export const theme = createTheme({
     glassBackground: pallete.glass,
     humidityBox: pallete.gray,
     humidity: pallete.blue,
-    textColor: pallete.white,
-    textColorBlack: pallete.black,
+    white: pallete.white,
+    black: pallete.black,
   },
   gradients: {
     clear: ['#9FBDE0', '#4A90E2'],
