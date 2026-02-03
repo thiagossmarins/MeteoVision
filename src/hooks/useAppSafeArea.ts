@@ -2,7 +2,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppTheme } from '../hooks/useAppTheme'
 
 export function useAppSafeArea() {
-  const { top, bottom,  } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const { spacing } = useAppTheme();
 
   return {

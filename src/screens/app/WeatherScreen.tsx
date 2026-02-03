@@ -16,8 +16,11 @@ import { ActivityIndicator, ScrollView } from "react-native";
 import { HumidityIcon } from "../../assets/icons/HumidityIcon";
 import { SunnyIcon } from "../../assets/icons/SunnyIcon";
 import { humidityToText } from "../../utils/humidityText";
+import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 
 export function WeatherScreen() {
+  const { top, bottom } = useAppSafeArea();
+
   const { location, city } = useLocation();
 
   const { weather, dailyForecast, loadingWeather } = useWeather(
@@ -43,7 +46,7 @@ export function WeatherScreen() {
     <GradientScreen
       gradient={currentTheme.gradient}
     >
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView style={{ flex: 1, marginTop: top, marginBottom: bottom, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false}>
         <Text preset="mediumFontSize" medium textAlign="center" mt="s20">{city ?? 'Carregando...'}</Text>
         <Box justifyContent="center" alignItems="center" flex={1} height={450}>
           <Box alignItems="flex-start" justifyContent="center" flexDirection="row">
@@ -105,7 +108,7 @@ export function WeatherScreen() {
           </GlassBox>
         </Box>
 
-        <GlassBox justifyContent="center" alignItems="center" flexDirection="column" mt="s16" >
+        <GlassBox justifyContent="center" alignItems="center" flexDirection="column" mt="s16" mb="s24">
           {weather?.daily.sunrise[0] && weather?.daily.sunset[0] && (
             <SolarDeclination
               sunrise={weather.daily.sunrise[0]}
