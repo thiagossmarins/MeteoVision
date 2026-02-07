@@ -1,5 +1,5 @@
 import React from "react";
-import { GradientScreen } from "../../components/GradientScreen/GradientScreen";
+import { Screen } from "../../components/Screen/Screen";
 import { Text } from "../../components/Text/Text";
 import { Box } from "../../components/Box/Box";
 import { useLocation } from "../../hooks/useLocation";
@@ -12,7 +12,7 @@ import { uvIndexToText } from "../../utils/uvText";
 import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclination";
 import { HourlyForecast } from "../../components/HourlyForecast/HourlyForecast";
 import { DailyForecast } from "../../components/DailyForecast/DailyForecast";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native";
 import { HumidityIcon } from "../../assets/icons/HumidityIcon";
 import { SunnyIcon } from "../../assets/icons/SunnyIcon";
 import { humidityToText } from "../../utils/humidityText";
@@ -20,6 +20,7 @@ import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { SearchIcon } from "../../assets/icons/SearchIcon";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavitveStackParamList } from "../../routes/Routes"
+import { Button } from "../../components/Button/Button";
 
 type WeatherScreenProps = NativeStackScreenProps<NavitveStackParamList, 'WeatherScreen'>
 
@@ -36,7 +37,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const currentTheme = useDynamicWeatherTheme(weather);
 
   return (
-    <GradientScreen
+    <Screen
       gradient={currentTheme.gradient}
     >
       <ScrollView style={{ flex: 1, marginTop: top, marginBottom: bottom, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false}>
@@ -125,24 +126,11 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
       </ScrollView>
 
       <Box position="relative" bottom={bottom} right={0} width={"100%"} height={32} paddingHorizontal="s24" paddingTop="s8">
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            position: "absolute",
-            top: 5,
-            right: 24,
-            borderRadius: "50%",
-            height: 50,
-            width: 50,
-            backgroundColor: "rgba(255, 255, 255, 0.2)"
-          }}
-          onPress={() => navigation.navigate('MapScreen')}
-        >
+        <Button onPress={() => navigation.navigate('MapScreen')} style={{ right: 24, top: 4 }}>
           <SearchIcon />
-        </TouchableOpacity>
+        </Button>
       </Box>
 
-    </GradientScreen>
+    </Screen>
   )
 }

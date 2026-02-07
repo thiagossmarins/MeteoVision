@@ -2,12 +2,13 @@ import 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import { useAppTheme } from '../../hooks/useAppTheme'
 import { GradientColors } from '../../theme/theme'
+
 interface GradientProps {
   gradient: GradientColors
   children?: React.ReactNode
 }
 
-export function GradientScreen({ children, gradient, ...rest }: GradientProps) {
+export function Screen({ children, gradient, ...rest }: GradientProps) {
   const theme = useAppTheme();
 
   return (

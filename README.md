@@ -47,7 +47,7 @@ src/
 │   ├── Box/          # Container com Restyle
 │   ├── Text/         # Componente de texto
 │   ├── GlassBox/     # Card com efeito glassmorphism
-│   ├── GradientScreen/  # Tela com gradiente
+│   ├── Screen/  # Tela com gradiente
 │   ├── HourlyForecast/  # Previsão horária
 │   ├── DailyForecast/   # Previsão diária
 │   ├── SolarDeclination/ # Animação nascer/pôr do sol
