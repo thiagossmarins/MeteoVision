@@ -12,35 +12,28 @@ import { uvIndexToText } from "../../utils/uvText";
 import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclination";
 import { HourlyForecast } from "../../components/HourlyForecast/HourlyForecast";
 import { DailyForecast } from "../../components/DailyForecast/DailyForecast";
-import { ActivityIndicator, ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { HumidityIcon } from "../../assets/icons/HumidityIcon";
 import { SunnyIcon } from "../../assets/icons/SunnyIcon";
 import { humidityToText } from "../../utils/humidityText";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
+import { SearchIcon } from "../../assets/icons/SearchIcon";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NavitveStackParamList } from "../../routes/Routes"
 
-export function WeatherScreen() {
+type WeatherScreenProps = NativeStackScreenProps<NavitveStackParamList, 'WeatherScreen'>
+
+export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const { top, bottom } = useAppSafeArea();
 
   const { location, city } = useLocation();
 
-  const { weather, dailyForecast, loadingWeather } = useWeather(
+  const { weather, dailyForecast } = useWeather(
     location?.latitude,
     location?.longitude
   );
 
   const currentTheme = useDynamicWeatherTheme(weather);
-
-  if (loadingWeather) {
-    return (
-      <GradientScreen
-        gradient={currentTheme.gradient}
-      >
-        <Box flex={1} justifyContent="center" alignItems="center">
-          <ActivityIndicator color={"#fff"} size={50} />
-        </Box>
-      </GradientScreen>
-    );
-  }
 
   return (
     <GradientScreen
@@ -130,6 +123,25 @@ export function WeatherScreen() {
         </GlassBox>
 
       </ScrollView>
+
+      <Box position="relative" bottom={bottom} right={0} width={"100%"} height={32} paddingHorizontal="s24" paddingTop="s8">
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            top: 5,
+            right: 24,
+            borderRadius: "50%",
+            height: 50,
+            width: 50,
+            backgroundColor: "rgba(255, 255, 255, 0.2)"
+          }}
+          onPress={() => navigation.navigate('MapScreen')}
+        >
+          <SearchIcon />
+        </TouchableOpacity>
+      </Box>
 
     </GradientScreen>
   )
