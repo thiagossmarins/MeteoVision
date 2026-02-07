@@ -2,9 +2,14 @@
 
 Um aplicativo de previsão do tempo moderno e elegante para iOS e Android, desenvolvido com React Native.
 
-## 📸 Screenshots
+## 📸 Screenshots / demo
 
 <img src="https://github.com/user-attachments/assets/697e959e-d0ec-4d5b-a56d-c681c0aa7a92" alt="MeteoVision Screenshot" width="300"/>
+
+
+https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
+
+
 
 ## ✨ Funcionalidades
 
