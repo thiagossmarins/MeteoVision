@@ -37,8 +37,9 @@ export function HourlyForecast({ weather }: HourlyForecastProps) {
 
   return (
     <Box mt="s16">
-      <ScrollView 
-        horizontal 
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
       >
         <Box flexDirection="row" gap="s8">
           {hourlyData.map((hour, index) => (
@@ -52,7 +53,7 @@ export function HourlyForecast({ weather }: HourlyForecastProps) {
                 {getHourFromTime(hour.time)}h
               </Text>
 
-              <Text 
+              <Text
                 preset="mediumFontSize"
                 marginVertical="s8"
                 textAlign="center"
