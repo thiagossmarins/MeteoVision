@@ -7,6 +7,7 @@ import { ArrowBack } from "../../assets/icons/ArrowBack";
 import MapView, { MapPressEvent, Marker } from "react-native-maps";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { getCityByCoords } from "../../api/location/getCityByCoords";
+import { useWeatherStore } from "../../store/useWeatherStore";
 import { useState, useRef } from "react";
 
 type MapScreenProps = NativeStackScreenProps<NavitveStackParamList, 'MapScreen'>
@@ -20,6 +21,16 @@ export function MapScreen({ navigation }: MapScreenProps) {
   const { top, bottom } = useAppSafeArea();
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
+
+  // Lê a localização já carregada pela store — sem nova request
+  const userLocation = useWeatherStore((state) => state.location);
+
+  const initialRegion = userLocation ? {
+    latitude: userLocation.latitude,
+    longitude: userLocation.longitude,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  } : undefined;
 
   // useRef cria uma referência direta ao componente nativo MapView
   // isso nos permite chamar métodos imperativos nele, como animateToRegion,
@@ -71,6 +82,7 @@ export function MapScreen({ navigation }: MapScreenProps) {
         ref={mapRef}
         style={{ flex: 1, zIndex: 5 }}
         mapType="hybrid"
+        initialRegion={initialRegion}
         zoomEnabled
         zoomTapEnabled
         scrollEnabled
