@@ -7,7 +7,11 @@ import { ArrowBack } from "../../assets/icons/ArrowBack";
 import MapView, { MapPressEvent, Marker } from "react-native-maps";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { getCityByCoords } from "../../api/location/getCityByCoords";
+import { getWeatherByCoords } from "../../api/weather/weatherApi";
+import { WeatherData } from "../../api/weather/WeatherAPIModels";
 import { useWeatherStore } from "../../store/useWeatherStore";
+import { weatherCodeToText } from "../../utils/weatherCodeToText";
+import { weatherCodeToEmoji } from "../../utils/weatherCodeToEmoji";
 import { useState, useRef } from "react";
 
 type MapScreenProps = NativeStackScreenProps<NavitveStackParamList, 'MapScreen'>
@@ -21,6 +25,9 @@ export function MapScreen({ navigation }: MapScreenProps) {
   const { top, bottom } = useAppSafeArea();
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
+  const [stateName, setStateName] = useState<string | null>(null);
+  const [countryName, setCountryName] = useState<string | null>(null);
+  const [pinWeather, setPinWeather] = useState<WeatherData | null>(null);
 
   // Lê a localização já carregada pela store — sem nova request
   const userLocation = useWeatherStore((state) => state.location);
@@ -41,9 +48,19 @@ export function MapScreen({ navigation }: MapScreenProps) {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setSelectedLocation({ latitude, longitude });
     setCityName(null);
+    setStateName(null);
+    setCountryName(null);
+    setPinWeather(null);
 
-    const city = await getCityByCoords(latitude, longitude);
-    setCityName(city);
+    // Busca cidade e clima do ponto clicado em paralelo
+    const [city, weatherData] = await Promise.all([
+      getCityByCoords(latitude, longitude),
+      getWeatherByCoords(latitude, longitude),
+    ]);
+    setCityName(city.city);
+    setStateName(city.state);
+    setCountryName(city.country);
+    setPinWeather(weatherData);
 
     mapRef.current?.animateToRegion(
       {
@@ -68,13 +85,42 @@ export function MapScreen({ navigation }: MapScreenProps) {
 
       {selectedLocation && (
         <Box
-          style={{ bottom: bottom + 24, alignSelf: 'center', zIndex: 10 }}
+          style={{
+            bottom: bottom + 24,
+            alignSelf: 'center',
+            zIndex: 10,
+            width: "80%",
+            maxWidth: "80%",
+          }}
           position="absolute"
           backgroundColor="backgroundBlack"
-          padding="s12"
+          padding="s16"
           borderRadius="s16"
         >
-          <Text preset="smallFontSize" bold textAlign="center">📍 {cityName ?? 'Buscando cidade...'}  </Text>
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            gap="s48"
+          >
+            <Box>
+              <Text preset="smallFontSize" bold>
+                {cityName ?? 'Buscando...'}
+              </Text>
+              <Text preset="smallFontSize" bold>
+                {stateName ?? ''}, {countryName ?? ''}
+              </Text>
+            </Box>
+            {pinWeather && (
+              <Box>
+                <Text preset="smallFontSize" bold mb="s4">
+                  {weatherCodeToEmoji(pinWeather.current.weather_code)} {pinWeather.current.temperature_2m.toFixed(0)}{pinWeather.current_units.temperature_2m}
+                </Text>
+                <Text preset="smallFontSize" bold>
+                  {weatherCodeToText(pinWeather.current.weather_code)}
+                </Text>
+              </Box>
+            )}
+          </Box>
         </Box>
       )}
 
