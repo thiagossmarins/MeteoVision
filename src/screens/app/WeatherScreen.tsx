@@ -2,8 +2,7 @@ import React from "react";
 import { Screen } from "../../components/Screen/Screen";
 import { Text } from "../../components/Text/Text";
 import { Box } from "../../components/Box/Box";
-import { useLocation } from "../../hooks/useLocation";
-import { useWeather } from "../../hooks/useWeather";
+import { useWeatherStore } from "../../store/useWeatherStore";
 import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
 import { GlassBox } from "../../components/GlassBox/GlassBox";
 import { weatherCodeToText } from "../../utils/weatherCodeToText";
@@ -27,12 +26,11 @@ type WeatherScreenProps = NativeStackScreenProps<NavitveStackParamList, 'Weather
 export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const { top, bottom } = useAppSafeArea();
 
-  const { location, city } = useLocation();
-
-  const { weather, dailyForecast } = useWeather(
-    location?.latitude,
-    location?.longitude
-  );
+  // Cada seletor lê apenas o campo necessário da store.
+  // Se weather mudar, só quem usa weather re-renderiza — não o componente inteiro.
+  const weather = useWeatherStore((state) => state.weather);
+  const city = useWeatherStore((state) => state.city);
+  const dailyForecast = useWeatherStore((state) => state.dailyForecast);
 
   const currentTheme = useDynamicWeatherTheme(weather);
 
