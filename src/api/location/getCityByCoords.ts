@@ -1,7 +1,7 @@
 import axios from "axios";
-import { NominatimResponse } from "./CityAPIModels";
+import { NominatimResponse, LocationInfo } from "./CityAPIModels";
 
-export async function getCityByCoords(latitude: number, longitude: number): Promise<string> {
+export async function getCityByCoords(latitude: number, longitude: number): Promise<LocationInfo> {
   const response = await axios.get<NominatimResponse>(
     `https://nominatim.openstreetmap.org/reverse`,
     {
@@ -19,11 +19,9 @@ export async function getCityByCoords(latitude: number, longitude: number): Prom
 
   const address = response.data.address;
 
-  return (
-    address?.city ||
-    address?.town ||
-    address?.village ||
-    address?.state ||
-    "Cidade não foi encontrada"
-  )
+  return {
+    city: address?.city || address?.town || address?.village || "Cidade não encontrada",
+    state: address?.state || "",
+    country: address?.country || "",
+  };
 }

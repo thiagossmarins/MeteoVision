@@ -21,6 +21,8 @@ type WeatherState = {
   // --- Dados ---
   location: Location | null;
   city: string | null;
+  state: string | null;
+  country: string | null;
   weather: WeatherData | null;
   dailyForecast: any[];
 
@@ -64,6 +66,8 @@ export const useWeatherStore = create<WeatherState>((set) => ({
   // Valores iniciais
   location: null,
   city: null,
+  state: null,
+  country: null,
   weather: null,
   dailyForecast: [],
   isLoading: false,
@@ -124,7 +128,9 @@ export const useWeatherStore = create<WeatherState>((set) => ({
       // o resto do estado permanece intacto
       set({
         location,
-        city,
+        city: city.city,
+        state: city.state,
+        country: city.country,
         weather: weatherData,
         dailyForecast,
         isLoading: false,

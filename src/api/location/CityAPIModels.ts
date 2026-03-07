@@ -4,5 +4,12 @@ export type NominatimResponse = {
     town?: string;
     village?: string;
     state?: string;
+    country?: string;
   };
+};
+
+export type LocationInfo = {
+  city: string;
+  state: string;
+  country: string;
 };
