@@ -59,7 +59,7 @@ export function MapScreen({ navigation }: MapScreenProps) {
         <Box
           style={{ bottom: bottom + 24, alignSelf: 'center', zIndex: 10 }}
           position="absolute"
-          backgroundColor="glassBackground"
+          backgroundColor="backgroundBlack"
           padding="s12"
           borderRadius="s16"
         >
