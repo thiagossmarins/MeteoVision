@@ -3,7 +3,6 @@ import { Box } from "../../components/Box/Box";
 import { Button } from "../../components/Button/Button";
 import { NavitveStackParamList } from "../../routes/Routes";
 import { ArrowBack } from "../../assets/icons/ArrowBack";
-import { Dimensions } from "react-native";
 import MapView from "react-native-maps";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 
@@ -24,6 +23,12 @@ export function MapScreen({ navigation }: MapScreenProps) {
 
       <MapView
         style={{ flex: 1, zIndex: 5 }}
+        mapType="hybrid"
+        zoomEnabled
+        zoomTapEnabled
+        scrollEnabled
+        rotateEnabled
+        pitchEnabled
       />
 
     </Box>
