@@ -6,7 +6,8 @@ import { NavitveStackParamList } from "../../routes/Routes";
 import { ArrowBack } from "../../assets/icons/ArrowBack";
 import MapView, { MapPressEvent, Marker } from "react-native-maps";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
-import { useState } from "react";
+import { getCityByCoords } from "../../api/location/getCityByCoords";
+import { useState, useRef } from "react";
 
 type MapScreenProps = NativeStackScreenProps<NavitveStackParamList, 'MapScreen'>
 
@@ -18,10 +19,30 @@ type SelectedLocation = {
 export function MapScreen({ navigation }: MapScreenProps) {
   const { top, bottom } = useAppSafeArea();
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
+  const [cityName, setCityName] = useState<string | null>(null);
 
-  function handleMapPress(event: MapPressEvent) {
+  // useRef cria uma referência direta ao componente nativo MapView
+  // isso nos permite chamar métodos imperativos nele, como animateToRegion,
+  // sem precisar de estado ou re-renderização
+  const mapRef = useRef<MapView>(null);
+
+  async function handleMapPress(event: MapPressEvent) {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setSelectedLocation({ latitude, longitude });
+    setCityName(null);
+
+    const city = await getCityByCoords(latitude, longitude);
+    setCityName(city);
+
+    mapRef.current?.animateToRegion(
+      {
+        latitude,
+        longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      },
+      1500
+    );
   }
 
   return (
@@ -42,17 +63,12 @@ export function MapScreen({ navigation }: MapScreenProps) {
           padding="s12"
           borderRadius="s16"
         >
-          <Text preset="smallFontSize" bold textAlign="center">📍 Localização selecionada</Text>
-          <Text preset="smallFontSize" textAlign="center">
-            Lat: {selectedLocation.latitude.toFixed(6)}
-          </Text>
-          <Text preset="smallFontSize" textAlign="center">
-            Lon: {selectedLocation.longitude.toFixed(6)}
-          </Text>
+          <Text preset="smallFontSize" bold textAlign="center">📍 {cityName ?? 'Buscando cidade...'}  </Text>
         </Box>
       )}
 
       <MapView
+        ref={mapRef}
         style={{ flex: 1, zIndex: 5 }}
         mapType="hybrid"
         zoomEnabled
