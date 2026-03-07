@@ -70,18 +70,13 @@ export function SolarDeclination({
       let currentMinutes = now.getHours() * 60 + now.getMinutes();
       const totalDayMinutes = sunsetMinutes - sunriseMinutes;
 
-      // Log para debug
-      console.log(`[SolarDeclination] Hora atual: ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`);
-      console.log(`[SolarDeclination] Nascer: ${Math.floor(sunriseMinutes / 60)}:${String(sunriseMinutes % 60).padStart(2, '0')}`);
-      console.log(`[SolarDeclination] Pôr: ${Math.floor(sunsetMinutes / 60)}:${String(sunsetMinutes % 60).padStart(2, '0')}`);
-      console.log(`[SolarDeclination] Minutos atuais: ${currentMinutes}, Nascer: ${sunriseMinutes}, Pôr: ${sunsetMinutes}`);
+
 
       // Test mode: simula o movimento do sol ao longo do dia
       if (testMode) {
         // Cria uma animação contínua de 10 segundos para o dia todo
         const elapsed = (Date.now() % 10000) / 10000;
         currentMinutes = sunriseMinutes + elapsed * totalDayMinutes;
-        console.log(`[SolarDeclination] Test mode ativado, minutos: ${currentMinutes}`);
       }
 
       // Só mostrar o círculo se estiver entre nascer e pôr
@@ -100,7 +95,6 @@ export function SolarDeclination({
       const x = padding + progress * plotWidth;
       const y = padding + plotHeight - altitude * plotHeight;
 
-      console.log(`[SolarDeclination] Sol visível! Progress: ${(progress * 100).toFixed(1)}%`);
       setCurrentPos({ x, y, progress });
     };
 
