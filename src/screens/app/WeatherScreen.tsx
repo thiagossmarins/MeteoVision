@@ -1,134 +1,101 @@
-import React from "react";
+import React, { useState } from "react";
 import { Screen } from "../../components/Screen/Screen";
-import { Text } from "../../components/Text/Text";
 import { Box } from "../../components/Box/Box";
 import { useWeatherStore } from "../../store/useWeatherStore";
 import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
-import { GlassBox } from "../../components/GlassBox/GlassBox";
-import { weatherCodeToText } from "../../utils/weatherCodeToText";
-import { UVIndexCard } from "../../components/UvIndexCard/UVIdexCard";
-import { uvIndexToText } from "../../utils/uvText";
-import { SolarDeclination } from "../../components/SolarDeclination/SolarDeclination";
-import { HourlyForecast } from "../../components/HourlyForecast/HourlyForecast";
-import { DailyForecast } from "../../components/DailyForecast/DailyForecast";
-import { ScrollView } from "react-native";
-import { HumidityIcon } from "../../assets/icons/HumidityIcon";
-import { SunnyIcon } from "../../assets/icons/SunnyIcon";
-import { humidityToText } from "../../utils/humidityText";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { SearchIcon } from "../../assets/icons/SearchIcon";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { NavitveStackParamList } from "../../routes/Routes"
+import { NavitveStackParamList } from "../../routes/Routes";
 import { Button } from "../../components/Button/Button";
+import { WeatherPage } from "../../components/WeatherPage/WeatherPage";
+import PagerView from "react-native-pager-view";
 
 type WeatherScreenProps = NativeStackScreenProps<NavitveStackParamList, 'WeatherScreen'>
 
 export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const { top, bottom } = useAppSafeArea();
+  const [activePage, setActivePage] = useState(0);
 
-  // Cada seletor lê apenas o campo necessário da store.
-  // Se weather mudar, só quem usa weather re-renderiza — não o componente inteiro.
-  const weather = useWeatherStore((state) => state.weather);
-  const city = useWeatherStore((state) => state.city);
-  const dailyForecast = useWeatherStore((state) => state.dailyForecast);
+  // Dados da localização GPS — página 0
+  const gpsWeather = useWeatherStore((state) => state.weather);
+  const gpsCity = useWeatherStore((state) => state.city);
 
-  const currentTheme = useDynamicWeatherTheme(weather);
+  // Localizações salvas pelo usuário — páginas 1+
+  const savedLocations = useWeatherStore((state) => state.savedLocations);
+
+  // Todas as páginas: GPS na frente, salvas em seguida
+  const pages = [
+    { weather: gpsWeather, city: gpsCity },
+    ...savedLocations.map((loc) => ({ weather: loc.weather, city: loc.city })),
+  ];
+
+  // O tema do gradiente segue a página ativa para refletir o clima local
+  const activeWeather = pages[activePage]?.weather ?? null;
+  const currentTheme = useDynamicWeatherTheme(activeWeather);
 
   return (
-    <Screen
-      gradient={currentTheme.gradient}
-    >
-      <ScrollView style={{ flex: 1, marginTop: top, marginBottom: bottom, paddingHorizontal: 16 }} showsVerticalScrollIndicator={false}>
-        <Text preset="mediumFontSize" medium textAlign="center" mt="s20">{city ?? 'Carregando...'}</Text>
-        <Box justifyContent="center" alignItems="center" flex={1} height={450}>
-          <Box alignItems="flex-start" justifyContent="center" flexDirection="row">
-            <Text preset="bigFontSize" light>{weather?.current.temperature_2m.toFixed(0)}</Text>
-            <Text preset="mediumFontSize">{weather?.current_units.temperature_2m}</Text>
-          </Box>
-          <Text preset="smallFontSize">
-            ↑{weather?.daily.temperature_2m_max[0].toFixed(0)}{weather?.current_units.temperature_2m} /
-            ↓{weather?.daily.temperature_2m_min[0].toFixed(0)}{weather?.current_units.temperature_2m}
-          </Text>
-          <Text preset="smallFontSize">
-            {weather ? weatherCodeToText(weather.current.weather_code) : ""}
-          </Text>
-        </Box>
+    <Screen gradient={currentTheme.gradient}>
 
-        <GlassBox mt="s16">
-          <Text preset="smallFontSize">
-            Hoje faz máximas de {weather?.daily.temperature_2m_max[0].toFixed(0)}{weather?.current_units.temperature_2m} e
-            mínimas de {weather?.daily.temperature_2m_min[0].toFixed(0)}{weather?.current_units.temperature_2m}.
-            Sensação térmica de {weather?.current.apparent_temperature.toFixed(0)}{weather?.current_units.temperature_2m}
-          </Text>
+      {/* Pager horizontal: cada página é um WeatherPage independente */}
+      <PagerView
+        style={{ flex: 1 }}
+        initialPage={0}
+        onPageSelected={(e) => setActivePage(e.nativeEvent.position)}
+      >
+        {pages.map((page, index) => (
+          <WeatherPage
+            key={String(index)}
+            weather={page.weather}
+            city={page.city}
+            top={top}
+            bottom={bottom}
+          />
+        ))}
+      </PagerView>
 
-          <HourlyForecast weather={weather} />
-        </GlassBox>
-
-        <GlassBox mt="s16">
-          <DailyForecast dailyForecast={dailyForecast} weather={weather} />
-        </GlassBox>
-
-        <Box mt="s16" flexDirection="row" alignItems="flex-start" justifyContent="space-between" gap="s16">
-          <GlassBox flex={1} height={175}>
-            <Box flexDirection="row" alignItems="center" gap="s4" mb="s8">
-              <HumidityIcon />
-              <Text preset="titleBoxFontSize" bold>Umidade</Text>
-            </Box>
-            <Text preset="smallFontSize" light>
-              {humidityToText(weather?.hourly.relative_humidity_2m ? Math.max(...weather.hourly.relative_humidity_2m) : 0)}
-            </Text>
-
-            <Box alignItems="center" justifyContent="flex-end" height={"66%"}>
-              <Text preset="mediumFontSize" textAlign="center" medium>{weather?.hourly.relative_humidity_2m ? Math.max(...weather.hourly.relative_humidity_2m) : '-'}{weather?.hourly_units.relative_humidity_2m}</Text>
-
-              <Box width={"100%"} height={16} backgroundColor="humidityBox" overflow="hidden" borderRadius="s8">
-                <Box height={"100%"} backgroundColor="humidity" borderRadius={"s8"} style={{ width: `${weather?.hourly.relative_humidity_2m ? Math.max(...weather.hourly.relative_humidity_2m) : 0}%` }} />
-              </Box>
-            </Box>
-          </GlassBox>
-
-          <GlassBox flex={1} height={175}>
-            <Box flexDirection="row" alignItems="center" gap="s4" mb="s8">
-              <SunnyIcon />
-              <Text preset="titleBoxFontSize" bold>Índice UV</Text>
-            </Box>
-            <Text preset="smallFontSize" light>{weather ? uvIndexToText(Math.max(...weather.daily.uv_index_max)) : "0"}</Text>
-
-            <Box alignItems="center" justifyContent="flex-end" height={"68%"}>
-              <UVIndexCard uvValue={weather ? Math.max(...weather.daily.uv_index_max) : 0} />
-            </Box>
-          </GlassBox>
-        </Box>
-
-        <GlassBox justifyContent="center" alignItems="center" flexDirection="column" mt="s16" mb="s24">
-          {weather?.daily.sunrise[0] && weather?.daily.sunset[0] && (
-            <SolarDeclination
-              sunrise={weather.daily.sunrise[0]}
-              sunset={weather.daily.sunset[0]}
-              testMode={false}
+      {/* Indicador de páginas: só aparece quando há localizações salvas */}
+      {pages.length > 1 && (
+        <Box
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+          gap="s8"
+          style={{ paddingVertical: 8 }}
+        >
+          {pages.map((_, i) => (
+            <Box
+              key={i}
+              width={8}
+              height={8}
+              style={
+                i === activePage
+                  ? { backgroundColor: 'white', borderRadius: 100 }
+                  : { borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.6)', borderRadius: 100 }
+              }
             />
-          )}
-          <Box width={"100%"} alignItems="flex-start" flexDirection="row" gap="s32" justifyContent="center">
-            <Box alignItems="center" width={"50%"}>
-              <Text preset="smallFontSize" bold>Nascer do sol</Text>
-              <Text preset="mediumFontSize">{weather?.daily.sunrise[0].substring(11)}</Text>
-            </Box>
+          ))}
+        </Box>
+      )}
 
-            <Box alignItems="center" width={"50%"}>
-              <Text preset="smallFontSize" bold>Pôr do sol</Text>
-              <Text preset="mediumFontSize">{weather?.daily.sunset[0].substring(11)}</Text>
-            </Box>
-          </Box>
-        </GlassBox>
-
-      </ScrollView>
-
-      <Box position="relative" bottom={bottom} right={0} width={"100%"} height={32} paddingHorizontal="s24" paddingTop="s8">
-        <Button onPress={() => navigation.navigate('MapScreen')} style={{ right: 24, top: 4 }}>
+      {/* Botão do mapa — posicionado no canto inferior direito */}
+      <Box
+        position="relative"
+        bottom={bottom}
+        right={0}
+        width={"100%"}
+        height={32}
+        paddingHorizontal="s24"
+        paddingTop="s8"
+      >
+        <Button
+          onPress={() => navigation.navigate('MapScreen')}
+          style={{ right: 24, top: 4 }}
+        >
           <SearchIcon />
         </Button>
       </Box>
 
     </Screen>
-  )
+  );
 }

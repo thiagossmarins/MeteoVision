@@ -10,9 +10,9 @@ import { getCityByCoords } from "../../api/location/getCityByCoords";
 import { getWeatherByCoords } from "../../api/weather/weatherApi";
 import { WeatherData } from "../../api/weather/WeatherAPIModels";
 import { useWeatherStore } from "../../store/useWeatherStore";
-import { weatherCodeToText } from "../../utils/weatherCodeToText";
 import { weatherCodeToEmoji } from "../../utils/weatherCodeToEmoji";
 import { useState, useRef } from "react";
+import { TouchableOpacity } from "react-native";
 
 type MapScreenProps = NativeStackScreenProps<NavitveStackParamList, 'MapScreen'>
 
@@ -31,6 +31,10 @@ export function MapScreen({ navigation }: MapScreenProps) {
 
   // Lê a localização já carregada pela store — sem nova request
   const userLocation = useWeatherStore((state) => state.location);
+  const saveLocation = useWeatherStore((state) => state.saveLocation);
+
+  // Controla o feedback visual do botão Salvar ("Salvo ✓" por 2s)
+  const [saved, setSaved] = useState(false);
 
   const initialRegion = userLocation ? {
     latitude: userLocation.latitude,
@@ -51,6 +55,7 @@ export function MapScreen({ navigation }: MapScreenProps) {
     setStateName(null);
     setCountryName(null);
     setPinWeather(null);
+    setSaved(false);
 
     // Busca cidade e clima do ponto clicado em paralelo
     const [city, weatherData] = await Promise.all([
@@ -71,6 +76,20 @@ export function MapScreen({ navigation }: MapScreenProps) {
       },
       1500
     );
+  }
+
+  function handleSave() {
+    if (!selectedLocation || !cityName || !pinWeather) return;
+    saveLocation({
+      latitude: selectedLocation.latitude,
+      longitude: selectedLocation.longitude,
+      city: cityName,
+      state: stateName ?? '',
+      country: countryName ?? '',
+      weather: pinWeather,
+    });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
   }
 
   return (
@@ -102,11 +121,13 @@ export function MapScreen({ navigation }: MapScreenProps) {
             justifyContent="space-between"
             gap="s48"
           >
-            <Box>
+            <Box
+              maxWidth={165}
+            >
               <Text preset="smallFontSize" bold>
                 {cityName ?? 'Buscando...'}
               </Text>
-              <Text preset="smallFontSize" bold>
+              <Text preset="titleBoxFontSize" bold>
                 {stateName ?? ''}, {countryName ?? ''}
               </Text>
             </Box>
@@ -115,12 +136,24 @@ export function MapScreen({ navigation }: MapScreenProps) {
                 <Text preset="smallFontSize" bold mb="s4">
                   {weatherCodeToEmoji(pinWeather.current.weather_code)} {pinWeather.current.temperature_2m.toFixed(0)}{pinWeather.current_units.temperature_2m}
                 </Text>
-                <Text preset="smallFontSize" bold>
-                  {weatherCodeToText(pinWeather.current.weather_code)}
+                <Text preset="titleBoxFontSize" bold>
+                  ↑{pinWeather.daily.temperature_2m_max[0].toFixed(0)} /
+                  ↓{pinWeather.daily.temperature_2m_min[0].toFixed(0)}
                 </Text>
               </Box>
             )}
           </Box>
+
+          {/* Botão Salvar — só aparece quando os dados já carregaram */}
+          {cityName && pinWeather && (
+            <Box mt="s12" alignItems="center">
+              <TouchableOpacity onPress={handleSave} disabled={saved}>
+                <Text preset="smallFontSize" bold style={{ opacity: saved ? 0.6 : 1 }}>
+                  {saved ? 'Salvo ✓' : 'Salvar'}
+                </Text>
+              </TouchableOpacity>
+            </Box>
+          )}
         </Box>
       )}
 

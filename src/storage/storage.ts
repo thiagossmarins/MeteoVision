@@ -24,6 +24,7 @@ export const STORAGE_KEYS = {
   CITY: "cache:city",
   STATE: "cache:state",
   COUNTRY: "cache:country",
+  SAVED_LOCATIONS: "cache:saved_locations",
 } as const;
 
 export function saveObject<T>(key: string, value: T): void {

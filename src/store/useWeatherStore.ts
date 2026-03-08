@@ -16,6 +16,18 @@ type Location = {
   longitude: number;
 };
 
+// Localização salva manualmente pelo usuário pelo MapScreen.
+// Inclui um snapshot do clima no momento em que foi salva.
+export type SavedLocation = {
+  id: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  state: string;
+  country: string;
+  weather: WeatherData;
+};
+
 // Esse é o formato completo do estado global da store.
 // Tudo que qualquer tela precisar sobre clima e localização está aqui.
 type WeatherState = {
@@ -26,6 +38,7 @@ type WeatherState = {
   country: string | null;
   weather: WeatherData | null;
   dailyForecast: any[];
+  savedLocations: SavedLocation[];
 
   // --- Status ---
   isLoading: boolean;
@@ -35,6 +48,8 @@ type WeatherState = {
   // "Ação" no Zustand é uma função guardada dentro do próprio estado.
   // Qualquer componente pode chamá-la para disparar lógica e atualizar o estado.
   loadWeather: () => Promise<void>;
+  saveLocation: (data: Omit<SavedLocation, 'id'>) => void;
+  removeLocation: (id: string) => void;
 };
 
 // -------------------------------------------------------------------
@@ -63,7 +78,7 @@ async function requestLocationPermission(): Promise<boolean> {
 // O objeto retornado é o estado inicial + as ações.
 // -------------------------------------------------------------------
 
-export const useWeatherStore = create<WeatherState>((set) => ({
+export const useWeatherStore = create<WeatherState>((set, get) => ({
   // Valores iniciais
   location: null,
   city: null,
@@ -71,6 +86,7 @@ export const useWeatherStore = create<WeatherState>((set) => ({
   country: null,
   weather: null,
   dailyForecast: [],
+  savedLocations: [],
   isLoading: false,
   error: null,
 
@@ -85,6 +101,7 @@ export const useWeatherStore = create<WeatherState>((set) => ({
     // -------------------------------------------------------------------
     const cachedWeather = loadObject<WeatherData>(STORAGE_KEYS.WEATHER);
     const cachedLocation = loadObject<Location>(STORAGE_KEYS.LOCATION);
+    const cachedSavedLocations = loadObject<SavedLocation[]>(STORAGE_KEYS.SAVED_LOCATIONS) ?? [];
 
     if (cachedWeather && cachedLocation) {
       set({
@@ -94,11 +111,12 @@ export const useWeatherStore = create<WeatherState>((set) => ({
         city: loadObject<string>(STORAGE_KEYS.CITY),
         state: loadObject<string>(STORAGE_KEYS.STATE),
         country: loadObject<string>(STORAGE_KEYS.COUNTRY),
+        savedLocations: cachedSavedLocations,
         // isLoading continua true: vai atualizar em background logo abaixo
         isLoading: true,
       });
     } else {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true, error: null, savedLocations: cachedSavedLocations });
     }
 
     const mockLatitude = -22.3886;
@@ -172,5 +190,21 @@ export const useWeatherStore = create<WeatherState>((set) => ({
     } catch (e: any) {
       set({ error: e.message, isLoading: false });
     }
+  },
+
+  // Salva uma nova localização no estado e persiste no MMKV.
+  // O id é gerado com timestamp para garantir unicidade.
+  saveLocation: (data) => {
+    const newLocation: SavedLocation = { id: Date.now().toString(), ...data };
+    const updated = [...get().savedLocations, newLocation];
+    saveObject(STORAGE_KEYS.SAVED_LOCATIONS, updated);
+    set({ savedLocations: updated });
+  },
+
+  // Remove uma localização pelo id e persiste a lista atualizada.
+  removeLocation: (id) => {
+    const updated = get().savedLocations.filter((l) => l.id !== id);
+    saveObject(STORAGE_KEYS.SAVED_LOCATIONS, updated);
+    set({ savedLocations: updated });
   },
 }));
