@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
 import { Screen } from "../../components/Screen/Screen";
 import { Box } from "../../components/Box/Box";
 import { useWeatherStore } from "../../store/useWeatherStore";
@@ -9,13 +10,15 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavitveStackParamList } from "../../routes/Routes";
 import { Button } from "../../components/Button/Button";
 import { WeatherPage } from "../../components/WeatherPage/WeatherPage";
-import PagerView from "react-native-pager-view";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 type WeatherScreenProps = NativeStackScreenProps<NavitveStackParamList, 'WeatherScreen'>
 
 export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const { top, bottom } = useAppSafeArea();
   const [activePage, setActivePage] = useState(0);
+  const scrollRef = useRef<ScrollView>(null);
 
   // Dados da localização GPS — página 0
   const gpsWeather = useWeatherStore((state) => state.weather);
@@ -34,14 +37,24 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const activeWeather = pages[activePage]?.weather ?? null;
   const currentTheme = useDynamicWeatherTheme(activeWeather);
 
+  // Detecta qual página está visível após o scroll parar
+  function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const page = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+    setActivePage(page);
+  }
+
   return (
     <Screen gradient={currentTheme.gradient}>
 
-      {/* Pager horizontal: cada página é um WeatherPage independente */}
-      <PagerView
+      {/* Pager horizontal usando ScrollView nativo — sem dependência externa */}
+      <ScrollView
+        ref={scrollRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={handleScrollEnd}
         style={{ flex: 1 }}
-        initialPage={0}
-        onPageSelected={(e) => setActivePage(e.nativeEvent.position)}
+        scrollEventThrottle={16}
       >
         {pages.map((page, index) => (
           <WeatherPage
@@ -52,7 +65,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
             bottom={bottom}
           />
         ))}
-      </PagerView>
+      </ScrollView>
 
       {/* Indicador de páginas: só aparece quando há localizações salvas */}
       {pages.length > 1 && (
@@ -84,13 +97,13 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
         bottom={bottom}
         right={0}
         width={"100%"}
-        height={32}
+        height={45}
         paddingHorizontal="s24"
         paddingTop="s8"
       >
         <Button
           onPress={() => navigation.navigate('MapScreen')}
-          style={{ right: 24, top: 4 }}
+          style={{ right: 24, top: 15 }}
         >
           <SearchIcon />
         </Button>

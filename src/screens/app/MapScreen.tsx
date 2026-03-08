@@ -148,8 +148,8 @@ export function MapScreen({ navigation }: MapScreenProps) {
           {cityName && pinWeather && (
             <Box mt="s12" alignItems="center">
               <TouchableOpacity onPress={handleSave} disabled={saved}>
-                <Text preset="smallFontSize" bold style={{ opacity: saved ? 0.6 : 1 }}>
-                  {saved ? 'Salvo ✓' : 'Salvar'}
+                <Text preset="smallFontSize" bold mt="s32" style={{ opacity: saved ? 0.6 : 1 }}>
+                  {saved ? 'Localização salva ✓' : 'Salvar localização'}
                 </Text>
               </TouchableOpacity>
             </Box>

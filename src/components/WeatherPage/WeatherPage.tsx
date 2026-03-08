@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ScrollView } from "react-native";
+import { Dimensions, ScrollView } from "react-native";
 import { Box } from "../Box/Box";
 import { Text } from "../Text/Text";
 import { GlassBox } from "../GlassBox/GlassBox";
@@ -14,6 +14,8 @@ import { DailyForecast } from "../DailyForecast/DailyForecast";
 import { HumidityIcon } from "../../assets/icons/HumidityIcon";
 import { SunnyIcon } from "../../assets/icons/SunnyIcon";
 import { humidityToText } from "../../utils/humidityText";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 // WeatherPage é o conteúdo scrollável de UMA localização.
 // É reutilizado pelo WeatherScreen tanto para o GPS quanto para
@@ -36,7 +38,7 @@ export function WeatherPage({ weather, city, top, bottom }: WeatherPageProps) {
 
   return (
     <ScrollView
-      style={{ flex: 1, marginTop: top, paddingHorizontal: 16 }}
+      style={{ flex: 1, width: SCREEN_WIDTH, marginTop: top, paddingHorizontal: 16 }}
       contentContainerStyle={{ paddingBottom: bottom + 16 }}
       showsVerticalScrollIndicator={false}
     >
