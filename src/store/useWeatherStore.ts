@@ -5,6 +5,7 @@ import { getCityByCoords } from "../api/location/getCityByCoords";
 import { getWeatherByCoords } from "../api/weather/weatherApi";
 import { WeatherData } from "../api/weather/WeatherAPIModels";
 import { getDailyForecast } from "../utils/getDailyForecast";
+import { loadObject, saveObject, STORAGE_KEYS } from "../storage/storage";
 
 // -------------------------------------------------------------------
 // Tipos
@@ -76,7 +77,29 @@ export const useWeatherStore = create<WeatherState>((set) => ({
   // loadWeather é a única ação da store.
   // Ela centraliza tudo que antes estava espalhado em useLocation + useWeather.
   loadWeather: async () => {
-    set({ isLoading: true, error: null });
+    // -------------------------------------------------------------------
+    // PASSO 1 — Carrega o cache SINCRONAMENTE antes de qualquer await.
+    // Como o MMKV é síncrono, isso acontece antes do primeiro render
+    // da tela. O usuário vê os dados antigos imediatamente enquanto
+    // a nova request acontece em background.
+    // -------------------------------------------------------------------
+    const cachedWeather = loadObject<WeatherData>(STORAGE_KEYS.WEATHER);
+    const cachedLocation = loadObject<Location>(STORAGE_KEYS.LOCATION);
+
+    if (cachedWeather && cachedLocation) {
+      set({
+        weather: cachedWeather,
+        dailyForecast: getDailyForecast(cachedWeather.hourly),
+        location: cachedLocation,
+        city: loadObject<string>(STORAGE_KEYS.CITY),
+        state: loadObject<string>(STORAGE_KEYS.STATE),
+        country: loadObject<string>(STORAGE_KEYS.COUNTRY),
+        // isLoading continua true: vai atualizar em background logo abaixo
+        isLoading: true,
+      });
+    } else {
+      set({ isLoading: true, error: null });
+    }
 
     const mockLatitude = -22.3886;
     const mockLongitude = -44.9631;
@@ -123,6 +146,17 @@ export const useWeatherStore = create<WeatherState>((set) => ({
       ]);
 
       const dailyForecast = getDailyForecast(weatherData.hourly);
+
+      // -------------------------------------------------------------------
+      // PASSO 2 — Salva os dados frescos no cache MMKV.
+      // Na próxima abertura do app, esses valores serão lidos
+      // sincronamente no Passo 1 antes de qualquer request.
+      // -------------------------------------------------------------------
+      saveObject(STORAGE_KEYS.WEATHER, weatherData);
+      saveObject(STORAGE_KEYS.LOCATION, location);
+      saveObject(STORAGE_KEYS.CITY, city.city);
+      saveObject(STORAGE_KEYS.STATE, city.state);
+      saveObject(STORAGE_KEYS.COUNTRY, city.country);
 
       // set() faz merge: só atualiza as chaves passadas,
       // o resto do estado permanece intacto
