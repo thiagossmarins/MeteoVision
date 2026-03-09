@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
+import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Screen } from "../../components/Screen/Screen";
 import { Box } from "../../components/Box/Box";
+import { Text } from "../../components/Text/Text";
 import { useWeatherStore } from "../../store/useWeatherStore";
 import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
@@ -26,6 +27,31 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
 
   // Localizações salvas pelo usuário — páginas 1+
   const savedLocations = useWeatherStore((state) => state.savedLocations);
+  const removeLocation = useWeatherStore((state) => state.removeLocation);
+
+  // A página ativa corresponde a uma cidade salva quando index >= 1
+  const activeSavedLocation = activePage >= 1 ? savedLocations[activePage - 1] : null;
+
+  function handleRemove() {
+    if (!activeSavedLocation) return;
+    Alert.alert(
+      'Remover cidade',
+      `Deseja remover ${activeSavedLocation.city}?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Remover',
+          style: 'destructive',
+          onPress: () => {
+            removeLocation(activeSavedLocation.id);
+            // Volta para a página anterior após remover
+            scrollRef.current?.scrollTo({ x: (activePage - 1) * SCREEN_WIDTH, animated: true });
+            setActivePage((p) => Math.max(0, p - 1));
+          },
+        },
+      ]
+    );
+  }
 
   // Todas as páginas: GPS na frente, salvas em seguida
   const pages = [
@@ -91,7 +117,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
         </Box>
       )}
 
-      {/* Botão do mapa — posicionado no canto inferior direito */}
+      {/* Barra inferior: lixeira (esquerda, só em cidades salvas) + botão mapa (direita) */}
       <Box
         position="relative"
         bottom={bottom}
@@ -101,6 +127,24 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
         paddingHorizontal="s24"
         paddingTop="s8"
       >
+        {activeSavedLocation && (
+          <TouchableOpacity
+            onPress={handleRemove}
+            style={{
+              position: 'absolute',
+              left: 24,
+              top: 15,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 100,
+              height: 50,
+              width: 50,
+              backgroundColor: 'rgba(255,255,255,0.2)',
+            }}
+          >
+            <Text preset="smallFontSize">🗑️</Text>
+          </TouchableOpacity>
+        )}
         <Button
           onPress={() => navigation.navigate('MapScreen')}
           style={{ right: 24, top: 15 }}
