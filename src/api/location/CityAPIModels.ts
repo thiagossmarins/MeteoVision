@@ -13,3 +13,12 @@ export type LocationInfo = {
   state: string;
   country: string;
 };
+
+export type CitySearchResult = {
+  displayName: string;
+  city: string;
+  state: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+};
