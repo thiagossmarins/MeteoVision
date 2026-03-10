@@ -26,9 +26,12 @@ type WeatherPageProps = {
   // Espaços da safe area passados pelo pai para evitar múltiplos hooks
   top: number;
   bottom: number;
+  // Callbacks para notificar o pai sobre scroll vertical
+  onVerticalScrollBegin?: () => void;
+  onVerticalScrollEnd?: () => void;
 };
 
-export function WeatherPage({ weather, city, top, bottom }: WeatherPageProps) {
+export function WeatherPage({ weather, city, top, bottom, onVerticalScrollBegin, onVerticalScrollEnd }: WeatherPageProps) {
   // Calcula o forecast diário a partir dos dados hourly.
   // useMemo evita recalcular em cada render sem mudança de dados.
   const dailyForecast = useMemo(
@@ -41,6 +44,10 @@ export function WeatherPage({ weather, city, top, bottom }: WeatherPageProps) {
       style={{ flex: 1, width: SCREEN_WIDTH, marginTop: top, paddingHorizontal: 16 }}
       contentContainerStyle={{ paddingBottom: bottom + 16 }}
       showsVerticalScrollIndicator={false}
+      onScrollBeginDrag={onVerticalScrollBegin}
+      onMomentumScrollEnd={onVerticalScrollEnd}
+      onScrollEndDrag={onVerticalScrollEnd}
+      scrollEventThrottle={16}
     >
       <Text preset="mediumFontSize" medium textAlign="center" mt="s20">
         {city ?? 'Carregando...'}

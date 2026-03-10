@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView, TouchableOpacity, Alert } from "react-native";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { Screen } from "../../components/Screen/Screen";
 import { Box } from "../../components/Box/Box";
 import { Text } from "../../components/Text/Text";
@@ -20,6 +21,12 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const { top, bottom } = useAppSafeArea();
   const [activePage, setActivePage] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
+  const barVisible = useSharedValue(1);
+
+  const barStyle = useAnimatedStyle(() => ({
+    maxHeight: barVisible.value * 70,
+    opacity: barVisible.value,
+  }));
 
   // Dados da localização GPS — página 0
   const gpsWeather = useWeatherStore((state) => state.weather);
@@ -64,9 +71,22 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const currentTheme = useDynamicWeatherTheme(activeWeather);
 
   // Detecta qual página está visível após o scroll parar
+  function hideBar() {
+    barVisible.value = withTiming(0, { duration: 180 });
+  }
+
+  function showBar() {
+    barVisible.value = withTiming(1, { duration: 250, easing: Easing.out(Easing.quad) });
+  }
+
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
     const page = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
     setActivePage(page);
+    showBar();
+  }
+
+  function handleScrollBegin() {
+    hideBar();
   }
 
   return (
@@ -78,6 +98,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
+        onScrollBeginDrag={handleScrollBegin}
         onMomentumScrollEnd={handleScrollEnd}
         style={{ flex: 1 }}
         scrollEventThrottle={16}
@@ -89,69 +110,66 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
             city={page.city}
             top={top}
             bottom={bottom}
+            onVerticalScrollBegin={hideBar}
+            onVerticalScrollEnd={showBar}
           />
         ))}
       </ScrollView>
 
-      {/* Indicador de páginas: só aparece quando há localizações salvas */}
-      {pages.length > 1 && (
+      {/* Barra inferior: lixeira + indicador de páginas + lupa — todos centralizados */}
+      <Animated.View style={[{ overflow: 'hidden' }, barStyle]}>
         <Box
           flexDirection="row"
-          justifyContent="center"
           alignItems="center"
-          gap="s8"
-          style={{ paddingVertical: 8 }}
+          justifyContent="space-between"
+          width={"100%"}
+          paddingHorizontal="s24"
+          style={{ paddingBottom: bottom, paddingTop: 8 }}
         >
-          {pages.map((_, i) => (
-            <Box
-              key={i}
-              width={8}
-              height={8}
-              style={
-                i === activePage
-                  ? { backgroundColor: 'white', borderRadius: 100 }
-                  : { borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.6)', borderRadius: 100 }
-              }
-            />
-          ))}
-        </Box>
-      )}
+          {/* Lixeira — só ocupa espaço se houver cidade salva, senão placeholder invisível */}
+          <Box width={50} height={50} alignItems="center" justifyContent="center">
+            {activeSavedLocation && (
+              <TouchableOpacity
+                onPress={handleRemove}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 100,
+                  height: 50,
+                  width: 50,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                }}
+              >
+                <Text preset="smallFontSize">🗑️</Text>
+              </TouchableOpacity>
+            )}
+          </Box>
 
-      {/* Barra inferior: lixeira (esquerda, só em cidades salvas) + botão mapa (direita) */}
-      <Box
-        position="relative"
-        bottom={bottom}
-        right={0}
-        width={"100%"}
-        height={45}
-        paddingHorizontal="s24"
-        paddingTop="s8"
-      >
-        {activeSavedLocation && (
-          <TouchableOpacity
-            onPress={handleRemove}
-            style={{
-              position: 'absolute',
-              left: 24,
-              top: 15,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 100,
-              height: 50,
-              width: 50,
-              backgroundColor: 'rgba(255,255,255,0.2)',
-            }}
+          {/* Indicador de páginas centralizado */}
+          <Box flexDirection="row" alignItems="center" gap="s8">
+            {pages.map((_, i) => (
+              <Box
+                key={i}
+                width={8}
+                height={8}
+                style={
+                  i === activePage
+                    ? { backgroundColor: 'white', borderRadius: 100 }
+                    : { borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.6)', borderRadius: 100 }
+                }
+              />
+            ))}
+          </Box>
+
+          {/* Lupa */}
+          <Button
+            onPress={() => navigation.navigate('MapScreen')}
+            style={{ position: 'relative', top: 0, right: 0 }}
           >
-            <Text preset="smallFontSize">🗑️</Text>
-          </TouchableOpacity>
-        )}
-        <Button
-          onPress={() => navigation.navigate('MapScreen')}
-          style={{ right: 24, top: 15 }}
-        >
-          <SearchIcon />
-        </Button>
-      </Box>
+            <SearchIcon />
+          </Button>
+        </Box>
+      </Animated.View>
 
     </Screen>
   );
