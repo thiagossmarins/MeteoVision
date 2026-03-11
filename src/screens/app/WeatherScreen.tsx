@@ -7,7 +7,6 @@ import { useWeatherStore } from "../../store/useWeatherStore";
 import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { SearchIcon } from "../../assets/icons/SearchIcon";
-import { HamburgerIcon } from "../../assets/icons/HamburgerIcon";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavitveStackParamList } from "../../routes/Routes";
 import { Button } from "../../components/Button/Button";
@@ -74,14 +73,6 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   return (
     <Screen gradient={currentTheme.gradient}>
 
-      {/* Botão hambúrguer — superior esquerdo */}
-      <Button
-        style={{ position: 'absolute', top: top + 8, left: 24, zIndex: 20 }}
-        onPress={() => setMenuOpen(true)}
-      >
-        <HamburgerIcon />
-      </Button>
-
       {/* Pager horizontal usando ScrollView nativo — sem dependência externa */}
       <ScrollView
         ref={scrollRef}
@@ -102,6 +93,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
             bottom={bottom}
             onVerticalScrollBegin={hideBar}
             onVerticalScrollEnd={showBar}
+            onHamburgerPress={() => setMenuOpen(true)}
           />
         ))}
       </ScrollView>

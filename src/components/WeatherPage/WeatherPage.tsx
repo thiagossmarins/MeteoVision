@@ -3,6 +3,8 @@ import { Dimensions, ScrollView } from "react-native";
 import { Box } from "../Box/Box";
 import { Text } from "../Text/Text";
 import { GlassBox } from "../GlassBox/GlassBox";
+import { Button } from "../Button/Button";
+import { HamburgerIcon } from "../../assets/icons/HamburgerIcon";
 import { WeatherData } from "../../api/weather/WeatherAPIModels";
 import { getDailyForecast } from "../../utils/getDailyForecast";
 import { weatherCodeToText } from "../../utils/weatherCodeToText";
@@ -29,9 +31,10 @@ type WeatherPageProps = {
   // Callbacks para notificar o pai sobre scroll vertical
   onVerticalScrollBegin?: () => void;
   onVerticalScrollEnd?: () => void;
+  onHamburgerPress?: () => void;
 };
 
-export function WeatherPage({ weather, city, top, bottom, onVerticalScrollBegin, onVerticalScrollEnd }: WeatherPageProps) {
+export function WeatherPage({ weather, city, top, bottom, onVerticalScrollBegin, onVerticalScrollEnd, onHamburgerPress }: WeatherPageProps) {
   // Calcula o forecast diário a partir dos dados hourly.
   // useMemo evita recalcular em cada render sem mudança de dados.
   const dailyForecast = useMemo(
@@ -49,9 +52,17 @@ export function WeatherPage({ weather, city, top, bottom, onVerticalScrollBegin,
       onScrollEndDrag={onVerticalScrollEnd}
       scrollEventThrottle={16}
     >
-      <Text preset="mediumFontSize" medium textAlign="center" mt="s20">
-        {city ?? 'Carregando...'}
-      </Text>
+      <Box justifyContent="center" mt="s16">
+        <Box>
+          <Button onPress={onHamburgerPress}>
+            <HamburgerIcon />
+          </Button>
+        </Box>
+        <Text preset="mediumFontSize" medium textAlign="center" mt="s10">
+          {city ?? 'Carregando...'}
+        </Text>
+
+      </Box>
 
       <Box justifyContent="center" alignItems="center" flex={1} height={450}>
         <Box alignItems="flex-start" justifyContent="center" flexDirection="row">
