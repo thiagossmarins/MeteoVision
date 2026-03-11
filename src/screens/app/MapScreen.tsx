@@ -2,12 +2,15 @@ import { useRef } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import MapView, { Marker } from "react-native-maps";
 import Reanimated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 import { Box } from "../../components/Box/Box";
 import { Button } from "../../components/Button/Button";
+import { Text } from "../../components/Text/Text";
 import { MapSearchBar } from "../../components/MapSearchBar/MapSearchBar";
 import { MapLocationCard } from "../../components/MapLocationCard/MapLocationCard";
 import { ArrowBack } from "../../assets/icons/ArrowBack";
+import { NoWifiIcon } from "../../assets/icons/NoWifiIcon";
 import { NavitveStackParamList } from "../../routes/Routes";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { useMapSearch } from "../../hooks/useMapSearch";
@@ -17,11 +20,13 @@ import { useWeatherStore } from "../../store/useWeatherStore";
 type MapScreenProps = NativeStackScreenProps<NavitveStackParamList, 'MapScreen'>
 
 export function MapScreen({ navigation }: MapScreenProps) {
-  const { bottom } = useAppSafeArea();
+  const { top, bottom } = useAppSafeArea();
   const mapRef = useRef<MapView>(null);
   const currentRegionRef = useRef<{ latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number } | null>(null);
 
   const userLocation = useWeatherStore((state) => state.location);
+  const { isConnected } = useNetInfo();
+  const isOffline = isConnected === false;
 
   const initialRegion = userLocation ? {
     latitude: userLocation.latitude,
@@ -72,6 +77,34 @@ export function MapScreen({ navigation }: MapScreenProps) {
 
   return (
     <Box flex={1}>
+
+      {/* Banner de modo offline */}
+      {isOffline && (
+        <Box
+          position="absolute"
+          style={{ top: 0, alignSelf: 'center', zIndex: 30 }}
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap="s8"
+          backgroundColor="backgroundBlack"
+          paddingHorizontal="s16"
+          paddingVertical="s8"
+          borderRadius="s16"
+          flex={1}
+          width="100%"
+          height="100%"
+        >
+          <NoWifiIcon size={100} color="white" />
+          <Text mt="s20" preset="smallFontSize">Sem conexão com internet</Text>
+          <Button
+            style={{ position: 'absolute', top: top, left: 32, zIndex: 10 }}
+            onPress={() => navigation.goBack()}
+          >
+            <ArrowBack />
+          </Button>
+        </Box>
+      )}
 
       {/* Card de localização selecionada */}
       {activeLocation && (
