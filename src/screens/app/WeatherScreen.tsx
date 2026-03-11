@@ -1,17 +1,18 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { Screen } from "../../components/Screen/Screen";
 import { Box } from "../../components/Box/Box";
-import { Text } from "../../components/Text/Text";
 import { useWeatherStore } from "../../store/useWeatherStore";
 import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
 import { useAppSafeArea } from "../../hooks/useAppSafeArea";
 import { SearchIcon } from "../../assets/icons/SearchIcon";
+import { HamburgerIcon } from "../../assets/icons/HamburgerIcon";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavitveStackParamList } from "../../routes/Routes";
 import { Button } from "../../components/Button/Button";
 import { WeatherPage } from "../../components/WeatherPage/WeatherPage";
+import { SavedLocationsMenu } from "../../components/SavedLocationsMenu/SavedLocationsMenu";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -22,6 +23,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const [activePage, setActivePage] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
   const barVisible = useSharedValue(1);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const barStyle = useAnimatedStyle(() => ({
     maxHeight: barVisible.value * 70,
@@ -36,28 +38,8 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   const savedLocations = useWeatherStore((state) => state.savedLocations);
   const removeLocation = useWeatherStore((state) => state.removeLocation);
 
-  // A página ativa corresponde a uma cidade salva quando index >= 1
-  const activeSavedLocation = activePage >= 1 ? savedLocations[activePage - 1] : null;
-
-  function handleRemove() {
-    if (!activeSavedLocation) return;
-    Alert.alert(
-      'Remover cidade',
-      `Deseja remover ${activeSavedLocation.city}?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Remover',
-          style: 'destructive',
-          onPress: () => {
-            removeLocation(activeSavedLocation.id);
-            // Volta para a página anterior após remover
-            scrollRef.current?.scrollTo({ x: (activePage - 1) * SCREEN_WIDTH, animated: true });
-            setActivePage((p) => Math.max(0, p - 1));
-          },
-        },
-      ]
-    );
+  function handleRemove(id: string) {
+    removeLocation(id);
   }
 
   // Todas as páginas: GPS na frente, salvas em seguida
@@ -92,6 +74,14 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
   return (
     <Screen gradient={currentTheme.gradient}>
 
+      {/* Botão hambúrguer — superior esquerdo */}
+      <Button
+        style={{ position: 'absolute', top: top + 8, left: 24, zIndex: 20 }}
+        onPress={() => setMenuOpen(true)}
+      >
+        <HamburgerIcon />
+      </Button>
+
       {/* Pager horizontal usando ScrollView nativo — sem dependência externa */}
       <ScrollView
         ref={scrollRef}
@@ -116,7 +106,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
         ))}
       </ScrollView>
 
-      {/* Barra inferior: lixeira + indicador de páginas + lupa — todos centralizados */}
+      {/* Barra inferior: indicador de páginas + lupa */}
       <Animated.View style={[{ overflow: 'hidden' }, barStyle]}>
         <Box
           flexDirection="row"
@@ -126,24 +116,8 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
           paddingHorizontal="s24"
           style={{ paddingBottom: bottom, paddingTop: 8 }}
         >
-          {/* Lixeira — só ocupa espaço se houver cidade salva, senão placeholder invisível */}
-          <Box width={50} height={50} alignItems="center" justifyContent="center">
-            {activeSavedLocation && (
-              <TouchableOpacity
-                onPress={handleRemove}
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 100,
-                  height: 50,
-                  width: 50,
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                }}
-              >
-                <Text preset="smallFontSize">🗑️</Text>
-              </TouchableOpacity>
-            )}
-          </Box>
+          {/* Placeholder para manter lupa à direita */}
+          <Box width={50} height={50} />
 
           {/* Indicador de páginas centralizado */}
           <Box flexDirection="row" alignItems="center" gap="s8">
@@ -170,6 +144,14 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
           </Button>
         </Box>
       </Animated.View>
+
+      {/* Menu de localizações salvas */}
+      <SavedLocationsMenu
+        visible={menuOpen}
+        locations={savedLocations}
+        onClose={() => setMenuOpen(false)}
+        onRemove={handleRemove}
+      />
 
     </Screen>
   );
