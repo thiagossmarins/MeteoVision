@@ -1,5 +1,9 @@
 # ☁️ MeteoVision
 
+<p align="center">
+  <img src="src/assets/images/MeteoVisionLogo.png" alt="MeteoVision Logo" width="180"/>
+</p>
+
 Um aplicativo de previsão do tempo moderno e elegante para iOS e Android, desenvolvido com React Native.
 
 ## 📸 Screenshots
