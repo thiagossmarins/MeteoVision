@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { TouchableOpacity, ScrollView } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import MapView, { Marker } from "react-native-maps";
 import Reanimated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
@@ -134,7 +135,36 @@ export function MapScreen({ navigation }: MapScreenProps) {
           borderTopLeftRadius="s48"
           borderTopRightRadius="s48"
         >
-          <Box flexDirection="row-reverse" alignItems="center" gap="s20">
+          {/* Dropdown de resultados — largura total do bottom bar */}
+          {showResults && searchResults.length > 0 && (
+            <Box
+              backgroundColor="backgroundBlack"
+              borderRadius="s16"
+              style={{ maxHeight: 220, overflow: 'hidden' }}
+            >
+              <ScrollView keyboardShouldPersistTaps="handled">
+                {searchResults.map((result, index) => (
+                  <TouchableOpacity key={index} onPress={() => handleSelectCity(result)}>
+                    <Box
+                      paddingHorizontal="s16"
+                      paddingVertical="s12"
+                      style={{
+                        borderBottomWidth: index < searchResults.length - 1 ? 0.5 : 0,
+                        borderBottomColor: 'rgba(255,255,255,0.1)',
+                      }}
+                    >
+                      <Text preset="smallFontSize" bold>{result.city}</Text>
+                      <Text preset="titleBoxFontSize">
+                        {[result.state, result.country].filter(Boolean).join(', ')}
+                      </Text>
+                    </Box>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </Box>
+          )}
+
+          <Box flexDirection="row" alignItems="center" gap="s20">
             <Button
               style={{ position: 'relative', zIndex: 10 }}
               onPress={() => navigation.goBack()}
@@ -144,10 +174,7 @@ export function MapScreen({ navigation }: MapScreenProps) {
 
             <MapSearchBar
               query={searchQuery}
-              results={searchResults}
-              showResults={showResults}
               onChangeText={handleSearchChange}
-              onSelectCity={handleSelectCity}
               onClear={clearSearch}
             />
           </Box>
