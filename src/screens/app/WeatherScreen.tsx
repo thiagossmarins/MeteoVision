@@ -129,6 +129,7 @@ export function WeatherScreen({ navigation }: WeatherScreenProps) {
 
           {/* Lupa */}
           <Button
+            testID="btn-abrir-mapa"
             onPress={() => navigation.navigate('MapScreen')}
             style={{ position: 'relative', top: 0, right: 0 }}
           >

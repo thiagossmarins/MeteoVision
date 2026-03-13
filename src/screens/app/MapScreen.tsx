@@ -144,7 +144,11 @@ export function MapScreen({ navigation }: MapScreenProps) {
             >
               <ScrollView keyboardShouldPersistTaps="handled">
                 {searchResults.map((result, index) => (
-                  <TouchableOpacity key={index} onPress={() => handleSelectCity(result)}>
+                  <TouchableOpacity
+                    key={index}
+                    testID={`resultado-cidade-${index}`}
+                    onPress={() => handleSelectCity(result)}
+                  >
                     <Box
                       paddingHorizontal="s16"
                       paddingVertical="s12"
@@ -166,6 +170,7 @@ export function MapScreen({ navigation }: MapScreenProps) {
 
           <Box flexDirection="row" alignItems="center" gap="s20">
             <Button
+              testID="btn-voltar-mapa"
               style={{ position: 'relative', zIndex: 10 }}
               onPress={() => navigation.goBack()}
             >

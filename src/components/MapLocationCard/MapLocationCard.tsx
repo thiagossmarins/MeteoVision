@@ -53,7 +53,7 @@ export function MapLocationCard({
 
       {cityName && weather && (
         <Box mt="s12" alignItems="center">
-          <TouchableOpacity onPress={onSave} disabled={saved}>
+          <TouchableOpacity testID="btn-salvar-localizacao" onPress={onSave} disabled={saved}>
             <Text preset="smallFontSize" bold mt="s32" style={{ opacity: saved ? 0.6 : 1 }}>
               {saved ? 'Localização salva ✓' : 'Salvar localização'}
             </Text>

@@ -1,0 +1,66 @@
+appId: org.reactjs.native.example.MeteoVision
+---
+# ─────────────────────────────────────────
+# Demo MeteoVision — Funcionalidade de Mapa
+# ─────────────────────────────────────────
+# Como usar:
+#   1. Inicie a gravação do simulador:
+#        xcrun simctl io booted recordVideo demo_mapa.mp4
+#   2. Em outro terminal, rode o fluxo:
+#        maestro test maestro/demo_mapa.yaml
+#   3. Ctrl+C para parar a gravação
+# ─────────────────────────────────────────
+
+- launchApp
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# Abre o mapa pela lupa na barra inferior
+- tapOn:
+    id: "btn-abrir-mapa"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# Digita o nome de uma cidade na barra de busca
+- tapOn:
+    id: "input-busca-cidade"
+- inputText: "Tokyo"
+
+# Aguarda o dropdown de resultados aparecer com "Tokyo"
+- extendedWaitUntil:
+    visible:
+      text: "Tokyo"
+    timeout: 5000
+
+# Seleciona o primeiro resultado (Tokyo)
+- tapOn:
+    id: "resultado-cidade-0"
+
+# Aguarda a animação de voo terminar (~3s) + fetch do clima (~3s)
+- waitForAnimationToEnd:
+    timeout: 10000
+
+# Aguarda o card aparecer com dados do clima carregados
+- extendedWaitUntil:
+    visible:
+      id: "btn-salvar-localizacao"
+    timeout: 15000
+
+# Salva a localização
+- tapOn:
+    id: "btn-salvar-localizacao"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# Volta para a tela principal
+- tapOn:
+    id: "btn-voltar-mapa"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# Arrasta para a esquerda para ir até a página de Tokyo salva
+- swipe:
+    direction: LEFT
+    duration: 600
+- waitForAnimationToEnd:
+    timeout: 1500

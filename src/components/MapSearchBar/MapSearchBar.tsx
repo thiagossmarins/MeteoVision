@@ -24,6 +24,7 @@ export function MapSearchBar({
         alignItems="center"
       >
         <TextInput
+          testID="input-busca-cidade"
           value={query}
           onChangeText={onChangeText}
           placeholder="Buscar cidade..."
