@@ -16,6 +16,7 @@ export const theme = createTheme({
     humidity: pallete.blue,
     textColor: pallete.white,
     textColorBlack: pallete.black,
+    backgroundBlack: pallete.black
   },
   gradients: {
     clear: ['#9FBDE0', '#4A90E2'],
@@ -41,6 +42,8 @@ export const theme = createTheme({
   borderRadii: {
     s8: 8,
     s16: 16,
+    s32: 32,
+    s48: 48,
     s100: 100,
   },
   textVariants: {

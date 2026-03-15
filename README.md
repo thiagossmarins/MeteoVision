@@ -1,4 +1,10 @@
-# ☁️ MeteoVision
+<p align="center">
+  <img src="src/assets/images/MeteoVisionLogo.png" alt="MeteoVision Logo" width="180"/>
+  </p>
+
+<h1 align="center">
+   <i>MeteoVision</i>
+  </h1>
 
 Um aplicativo de previsão do tempo moderno e elegante para iOS e Android, desenvolvido com React Native.
 
@@ -22,10 +28,11 @@ https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
 - **Geolocalização automática**
 - **Gradientes animados** baseados no clima
 - **Interface glassmorphism** moderna
-
-## 🚧 Próximas Funcionalidades
-
-- **Mapa interativo** com visualização de clima por região (em desenvolvimento na branch `feat/MapScreen`)
+- **Mapa interativo** com satélite híbrido e pin de localização
+- **Busca de cidades** com animação de voo até o destino
+- **Salvar localizações** e navegar entre elas com swipe horizontal
+- **Menu hambúrguer** com lista de localizações salvas e remoção individual
+- **Indicador de modo offline** com ícone SVG de sem conexão
 
 ## 🛠️ Tecnologias
 
@@ -35,40 +42,57 @@ https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
 - **@shopify/restyle** - Sistema de temas e estilos
 - **react-native-linear-gradient** - Gradientes animados
 - **react-native-geolocation-service** - Serviços de localização
+- **react-native-maps** - Mapa interativo com modo satélite
+- **react-native-reanimated** 4.x - Animações de voo e UI
 - **react-native-svg** - Ícones e gráficos vetoriais
+- **@react-native-community/netinfo** - Detecção de conectividade
+- **zustand** - Gerenciamento de estado global
+- **react-native-mmkv** - Persistência de dados local
 - **axios** - Requisições HTTP para API de clima
+- **Maestro** - Testes de UI automatizados e gravação de demos
 
 ## 📂 Estrutura do Projeto
 
 ```
 src/
 ├── api/              # Serviços de API
-│   ├── location/     # API de geolocalização
-│   └── weather/      # API de clima
+│   ├── location/     # Geocodificação e busca de cidades (Nominatim)
+│   └── weather/      # API de clima (Open-Meteo)
 ├── assets/           # Recursos estáticos
 │   ├── fonts/        # Fontes customizadas
 │   └── icons/        # Ícones SVG
 ├── components/       # Componentes reutilizáveis
-│   ├── Box/          # Container com Restyle
-│   ├── Text/         # Componente de texto
-│   ├── GlassBox/     # Card com efeito glassmorphism
-│   ├── GradientScreen/  # Tela com gradiente
-│   ├── HourlyForecast/  # Previsão horária
-│   ├── DailyForecast/   # Previsão diária
-│   ├── SolarDeclination/ # Animação nascer/pôr do sol
-│   └── UvIndexCard/     # Card de índice UV
+│   ├── Box/               # Container com Restyle
+│   ├── Text/              # Componente de texto
+│   ├── GlassBox/          # Card com efeito glassmorphism
+│   ├── Screen/            # Tela com gradiente
+│   ├── HourlyForecast/    # Previsão horária
+│   ├── DailyForecast/     # Previsão diária
+│   ├── SolarDeclination/  # Animação nascer/pôr do sol
+│   ├── UvIndexCard/       # Card de índice UV
+│   ├── MapSearchBar/      # Barra de busca de cidades no mapa
+│   ├── MapLocationCard/   # Card de localização selecionada no mapa
+│   └── SavedLocationsMenu/ # Menu hambúrguer com localizações salvas
 ├── hooks/            # Hooks customizados
-│   ├── useLocation.ts   # Hook de geolocalização
-│   ├── useWeather.ts    # Hook de dados climáticos
-│   ├── useDynamicWeatherTheme.ts  # Tema dinâmico
-│   ├── useAppTheme.ts   # Tema da aplicação
-│   └── useAppSafeArea.ts # Safe area
+│   ├── useLocation.ts          # Hook de geolocalização
+│   ├── useWeather.ts           # Hook de dados climáticos
+│   ├── useDynamicWeatherTheme.ts # Tema dinâmico
+│   ├── useAppTheme.ts          # Tema da aplicação
+│   ├── useAppSafeArea.ts       # Safe area
+│   ├── useMapSearch.ts         # Busca de cidades com debounce
+│   └── useMapPin.ts            # Pin de localização no mapa
 ├── screens/          # Telas da aplicação
 │   └── app/
-│       └── WeatherScreen.tsx
+│       ├── WeatherScreen.tsx   # Tela principal com pager
+│       └── MapScreen.tsx       # Tela de mapa interativo
+├── store/            # Estado global
+│   └── useWeatherStore.ts      # Zustand: localização, clima, salvas
+├── storage/          # Persistência
+│   └── storage.ts              # MMKV
 ├── theme/            # Configuração de temas
 │   └── theme.ts
 └── utils/            # Funções utilitárias
+    ├── flyToRegion.ts
     ├── getDailyForecast.ts
     ├── getDayOfWeek.ts
     ├── getWeatherTheme.ts
@@ -76,6 +100,8 @@ src/
     ├── weatherCodeToEmoji.ts
     ├── uvText.ts
     └── humidityText.ts
+maestro/
+└── demo_mapa.yaml    # Fluxo de demo automatizado com Maestro
 ```
 
 ## 🚀 Como Executar
@@ -133,7 +159,7 @@ npm start
 
 ## 🌐 APIs Utilizadas
 
-### API de Clima
+### Open-Meteo
 Obtém dados meteorológicos em tempo real:
 - Temperatura atual e aparente
 - Previsão horária (24h)
@@ -143,7 +169,28 @@ Obtém dados meteorológicos em tempo real:
 - Horários de nascer e pôr do sol
 
 ### OpenStreetMap Nominatim API
-Realiza geocodificação reversa para converter coordenadas (latitude/longitude) em nome de cidade, vila ou estado
+- Geocodificação reversa: coordenadas → nome de cidade
+- Busca de cidades por nome com até 5 resultados
+
+## 🤖 Testes Automatizados
+
+O projeto usa **Maestro** para testes de UI e gravação de demos.
+
+### Instalar Maestro
+```bash
+curl -Ls "https://get.maestro.mobile.dev" | bash
+```
+
+### Gravar demo do mapa
+```bash
+# Terminal 1 — inicia gravação
+xcrun simctl io booted recordVideo demo_mapa.mp4
+
+# Terminal 2 — executa o fluxo
+maestro test maestro/demo_mapa.yaml
+```
+
+O fluxo cobre: abrir mapa → buscar cidade → animação de voo → salvar → swipe para a página salva.
 
 ## 📄 Licença
 
