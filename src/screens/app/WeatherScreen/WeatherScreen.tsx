@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
-import { Screen } from "../../components/Screen/Screen";
-import { Box } from "../../components/Box/Box";
-import { useWeatherStore } from "../../store/useWeatherStore";
-import { useDynamicWeatherTheme } from "../../hooks/useDynamicWeatherTheme";
-import { useAppSafeArea } from "../../hooks/useAppSafeArea";
-import { SearchIcon } from "../../assets/icons/SearchIcon";
+import { Screen } from "../../../components/Screen/Screen";
+import { Box } from "../../../components/Box/Box";
+import { useWeatherStore } from "../../../store/useWeatherStore";
+import { useDynamicWeatherTheme } from "../../../hooks/useDynamicWeatherTheme";
+import { useAppSafeArea } from "../../../hooks/useAppSafeArea";
+import { SearchIcon } from "../../../assets/icons/SearchIcon";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { NavitveStackParamList } from "../../routes/Routes";
-import { Button } from "../../components/Button/Button";
-import { WeatherPage } from "../../components/WeatherPage/WeatherPage";
-import { SavedLocationsMenu } from "../../components/SavedLocationsMenu/SavedLocationsMenu";
+import { NavitveStackParamList } from "../../../routes/Routes";
+import { Button } from "../../../components/Button/Button";
+import { WeatherPage } from "../../../components/WeatherPage/WeatherPage";
+import { SavedLocationsMenu } from "../../../components/SavedLocationsMenu/SavedLocationsMenu";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 

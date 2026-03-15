@@ -1,8 +1,8 @@
 import { TouchableOpacity } from "react-native";
-import { Box } from "../Box/Box";
-import { Text } from "../Text/Text";
-import { WeatherData } from "../../api/weather/WeatherAPIModels";
-import { weatherCodeToEmoji } from "../../utils/weatherCodeToEmoji";
+import { Box } from "../../../../../components/Box/Box";
+import { Text } from "../../../../../components/Text/Text";
+import { WeatherData } from "../../../../../api/weather/WeatherAPIModels";
+import { weatherCodeToEmoji } from "../../../../../utils/weatherCodeToEmoji";
 
 type MapLocationCardProps = {
   cityName: string | null;

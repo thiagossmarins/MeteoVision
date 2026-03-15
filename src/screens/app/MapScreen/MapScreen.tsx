@@ -5,18 +5,18 @@ import MapView, { Marker } from "react-native-maps";
 import Reanimated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import { Box } from "../../components/Box/Box";
-import { Button } from "../../components/Button/Button";
-import { Text } from "../../components/Text/Text";
-import { MapSearchBar } from "../../components/MapSearchBar/MapSearchBar";
-import { MapLocationCard } from "../../components/MapLocationCard/MapLocationCard";
-import { ArrowBack } from "../../assets/icons/ArrowBack";
-import { NoWifiIcon } from "../../assets/icons/NoWifiIcon";
-import { NavitveStackParamList } from "../../routes/Routes";
-import { useAppSafeArea } from "../../hooks/useAppSafeArea";
-import { useMapSearch } from "../../hooks/useMapSearch";
-import { useMapPin } from "../../hooks/useMapPin";
-import { useWeatherStore } from "../../store/useWeatherStore";
+import { Box } from "../../../components/Box/Box";
+import { Button } from "../../../components/Button/Button";
+import { Text } from "../../../components/Text/Text";
+import { MapSearchBar } from "./components/MapSearchBar/MapSearchBar";
+import { MapLocationCard } from "./components/MapLocationCard/MapLocationCard";
+import { ArrowBack } from "../../../assets/icons/ArrowBack";
+import { NoWifiIcon } from "../../../assets/icons/NoWifiIcon";
+import { NavitveStackParamList } from "../../../routes/Routes";
+import { useAppSafeArea } from "../../../hooks/useAppSafeArea";
+import { useMapSearch } from "../../../hooks/useMapSearch";
+import { useMapPin } from "../../../hooks/useMapPin";
+import { useWeatherStore } from "../../../store/useWeatherStore";
 
 type MapScreenProps = NativeStackScreenProps<NavitveStackParamList, 'MapScreen'>
 
@@ -76,6 +76,7 @@ export function MapScreen({ navigation }: MapScreenProps) {
       ? { latitude: pinnedLocation.latitude, longitude: pinnedLocation.longitude }
       : null;
 
+  
   return (
     <Box flex={1}>
 

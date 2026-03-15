@@ -52,7 +52,7 @@ export function useLocation() {
           setLocation({ latitude: mockLatitude, longitude: mockLongitude });
 
           const cityName = await getCityByCoords(mockLatitude, mockLongitude);
-          setCity(cityName);
+          setCity(cityName.city);
 
           setLoadindLocation(false);
           return;
@@ -67,7 +67,7 @@ export function useLocation() {
             setLocation({ latitude, longitude });
 
             const cityName = await getCityByCoords(latitude, longitude);
-            setCity(cityName);
+            setCity(cityName.city);
 
             // aqui quando tivermos nossa localização, o loading vai parar
             setLoadindLocation(false);
@@ -79,7 +79,7 @@ export function useLocation() {
             // FALLBACK: usar localização mock se o GPS falhar
             setLocation({ latitude: mockLatitude, longitude: mockLongitude });
             const cityName = await getCityByCoords(mockLatitude, mockLongitude);
-            setCity(cityName);
+            setCity(cityName.city);
             
             setLocationError(`GPS indisponível, usando localização padrão`);
             setLoadindLocation(false);

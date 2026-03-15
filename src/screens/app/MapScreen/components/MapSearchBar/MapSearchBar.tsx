@@ -1,6 +1,6 @@
 import { TouchableOpacity, TextInput } from "react-native";
-import { Box } from "../Box/Box";
-import { Text } from "../Text/Text";
+import { Box } from "../../../../../components/Box/Box";
+import { Text } from "../../../../../components/Text/Text";
 
 type MapSearchBarProps = {
   query: string;
