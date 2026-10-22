@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Sora.app"
-               BlueprintName = "Sora"
-               ReferencedContainer = "container:Sora.xcodeproj">
+               BuildableName = "sora.app"
+               BlueprintName = "sora"
+               ReferencedContainer = "container:sora.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "SoraTests.xctest"
-               BlueprintName = "SoraTests"
-               ReferencedContainer = "container:Sora.xcodeproj">
+               BuildableName = "soraTests.xctest"
+               BlueprintName = "soraTests"
+               ReferencedContainer = "container:sora.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Sora.app"
-            BlueprintName = "Sora"
-            ReferencedContainer = "container:Sora.xcodeproj">
+            BuildableName = "sora.app"
+            BlueprintName = "sora"
+            ReferencedContainer = "container:sora.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Sora.app"
-            BlueprintName = "Sora"
-            ReferencedContainer = "container:Sora.xcodeproj">
+            BuildableName = "sora.app"
+            BlueprintName = "sora"
+            ReferencedContainer = "container:sora.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -1,4 +1,4 @@
-# Sora – Instruções para GitHub Copilot
+# sora – Instruções para GitHub Copilot
 
 Aplicativo de previsão do tempo para React Native com mapa interativo.
 
