@@ -4,4 +4,5 @@ Série do conjunto sempre carregado, uma linha por medição, a mais recente no 
 
 | Data | Conjunto | Vitrine | Memória total | Fração | Coletor |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-21 | 2,0 KB | 2,0 KB | 17,4 KB | 11,7% | soma manual de bytes (`wc -c`), encerramento |
 | 2026-10-21 | 1,3 KB | 1,3 KB | 13,6 KB | 9,5% | soma manual de bytes (`wc -c`), adoção e correção do R10 |
