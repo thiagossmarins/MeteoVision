@@ -1,4 +1,4 @@
-package com.meteovision
+package com.sora
 
 import android.app.Application
 import com.facebook.react.PackageList
