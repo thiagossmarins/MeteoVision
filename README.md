@@ -1,205 +1,210 @@
-<p align="center">
-  <img src="src/assets/images/MeteoVisionLogo.png" alt="MeteoVision Logo" width="180"/>
-  </p>
+<div align="center">
 
-<h1 align="center">
-   <i>MeteoVision</i>
-  </h1>
+<img src="src/assets/images/MeteoVisionLogo.png" alt="MeteoVision" width="160"/>
 
-Um aplicativo de previsão do tempo moderno e elegante para iOS e Android, desenvolvido com React Native.
+# MeteoVision
 
-## 📸 Screenshots / demo
+**Previsão do tempo moderna, fluida e elegante para iOS e Android.**
+
+Clima em tempo real, mapa satélite interativo, localizações salvas e um tema que muda com o céu.
+
+<br/>
+
+![React Native](https://img.shields.io/badge/React_Native-0.82-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Platforms](https://img.shields.io/badge/iOS%20%7C%20Android-000000?style=for-the-badge&logo=apple&logoColor=white)
+![Node](https://img.shields.io/badge/Node-%E2%89%A5%2020-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+
+[Funcionalidades](#-funcionalidades) •
+[Demo](#-demo) •
+[Tecnologias](#-tecnologias) •
+[Começando](#-começando) •
+[Arquitetura](#-arquitetura) •
+[APIs](#-apis) •
+[Testes](#-testes-automatizados)
+
+</div>
+
+---
+
+## 🎬 Demo
+
+<div align="center">
 
 <img src="https://github.com/user-attachments/assets/697e959e-d0ec-4d5b-a56d-c681c0aa7a92" alt="MeteoVision Screenshot" width="300"/>
 
+</div>
 
 https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
 
-
+---
 
 ## ✨ Funcionalidades
 
-- **Temperatura atual** com sensação térmica
-- **Previsão horária** e diária detalhada
-- **Nascer e pôr do sol** com visualização animada
-- **Índice UV** com escala visual
-- **Umidade relativa** do ar
+### 🌤️ Clima
+
+| | |
+| --- | --- |
+| 🌡️ **Temperatura atual** | Com sensação térmica |
+| ⏱️ **Previsão horária e diária** | Detalhada, hora a hora e dia a dia |
+| 🌅 **Nascer e pôr do sol** | Visualização animada da trajetória do sol |
+| ☀️ **Índice UV** | Escala visual de intensidade |
+| 💧 **Umidade relativa** | Do ar, em destaque |
+| 📶 **Modo offline** | Indicador com ícone SVG de sem conexão |
+
+### 🗺️ Mapa e localizações
+
+| | |
+| --- | --- |
+| 🛰️ **Mapa interativo** | Satélite híbrido com pin de localização |
+| 🔎 **Busca de cidades** | Com animação de voo até o destino |
+| 📌 **Localizações salvas** | Navegação entre elas com swipe horizontal |
+| 🍔 **Menu hambúrguer** | Lista de salvas com remoção individual |
+| 📍 **Geolocalização automática** | Começa já na sua posição |
+
+### 🎨 Interface
+
 - **Tema dinâmico** que se adapta às condições climáticas
-- **Geolocalização automática**
 - **Gradientes animados** baseados no clima
-- **Interface glassmorphism** moderna
-- **Mapa interativo** com satélite híbrido e pin de localização
-- **Busca de cidades** com animação de voo até o destino
-- **Salvar localizações** e navegar entre elas com swipe horizontal
-- **Menu hambúrguer** com lista de localizações salvas e remoção individual
-- **Indicador de modo offline** com ícone SVG de sem conexão
+- **Glassmorphism** moderno nos cards
+
+---
 
 ## 🛠️ Tecnologias
 
-- **React Native** 0.82.1
-- **TypeScript** 5.8.3
-- **React** 19.1.1
-- **@shopify/restyle** - Sistema de temas e estilos
-- **react-native-linear-gradient** - Gradientes animados
-- **react-native-geolocation-service** - Serviços de localização
-- **react-native-maps** - Mapa interativo com modo satélite
-- **react-native-reanimated** 4.x - Animações de voo e UI
-- **react-native-svg** - Ícones e gráficos vetoriais
-- **@react-native-community/netinfo** - Detecção de conectividade
-- **zustand** - Gerenciamento de estado global
-- **react-native-mmkv** - Persistência de dados local
-- **axios** - Requisições HTTP para API de clima
-- **Maestro** - Testes de UI automatizados e gravação de demos
+| Camada | Stack |
+| --- | --- |
+| **Base** | React Native 0.82.1 · React 19.1.1 · TypeScript 5.8.3 |
+| **Navegação** | React Navigation (native-stack) · react-native-screens · react-native-gesture-handler |
+| **Estilo e temas** | `@shopify/restyle` · react-native-linear-gradient · `@react-native-community/blur` |
+| **Animações** | react-native-reanimated 4.x · react-native-worklets |
+| **Mapas e localização** | react-native-maps · react-native-geolocation-service |
+| **Gráficos** | react-native-svg |
+| **Estado e persistência** | zustand · react-native-mmkv |
+| **Rede** | axios · `@react-native-community/netinfo` |
+| **Qualidade** | ESLint · Prettier · Jest · Maestro |
 
-## 📂 Estrutura do Projeto
+---
 
-```
-src/
-├── api/              # Serviços de API
-│   ├── location/     # Geocodificação e busca de cidades (Nominatim)
-│   └── weather/      # API de clima (Open-Meteo)
-├── assets/           # Recursos estáticos
-│   ├── fonts/        # Fontes customizadas
-│   └── icons/        # Ícones SVG
-├── components/       # Componentes reutilizáveis
-│   ├── Box/               # Container com Restyle
-│   ├── Text/              # Componente de texto
-│   ├── GlassBox/          # Card com efeito glassmorphism
-│   ├── Screen/            # Tela com gradiente
-│   ├── HourlyForecast/    # Previsão horária
-│   ├── DailyForecast/     # Previsão diária
-│   ├── SolarDeclination/  # Animação nascer/pôr do sol
-│   ├── UvIndexCard/       # Card de índice UV
-│   ├── MapSearchBar/      # Barra de busca de cidades no mapa
-│   ├── MapLocationCard/   # Card de localização selecionada no mapa
-│   └── SavedLocationsMenu/ # Menu hambúrguer com localizações salvas
-├── hooks/            # Hooks customizados
-│   ├── useLocation.ts          # Hook de geolocalização
-│   ├── useWeather.ts           # Hook de dados climáticos
-│   ├── useDynamicWeatherTheme.ts # Tema dinâmico
-│   ├── useAppTheme.ts          # Tema da aplicação
-│   ├── useAppSafeArea.ts       # Safe area
-│   ├── useMapSearch.ts         # Busca de cidades com debounce
-│   └── useMapPin.ts            # Pin de localização no mapa
-├── screens/          # Telas da aplicação
-│   └── app/
-│       ├── WeatherScreen.tsx   # Tela principal com pager
-│       └── MapScreen.tsx       # Tela de mapa interativo
-├── store/            # Estado global
-│   └── useWeatherStore.ts      # Zustand: localização, clima, salvas
-├── storage/          # Persistência
-│   └── storage.ts              # MMKV
-├── theme/            # Configuração de temas
-│   └── theme.ts
-└── utils/            # Funções utilitárias
-    ├── flyToRegion.ts
-    ├── getDailyForecast.ts
-    ├── getDayOfWeek.ts
-    ├── getWeatherTheme.ts
-    ├── weatherCodeToText.ts
-    ├── weatherCodeToEmoji.ts
-    ├── uvText.ts
-    └── humidityText.ts
-maestro/
-└── demo_mapa.yaml    # Fluxo de demo automatizado com Maestro
-```
-
-## 🚀 Como Executar
+## 🚀 Começando
 
 ### Pré-requisitos
 
-- Node.js >= 20
+- Node.js `>= 20`
 - npm ou yarn
-- Xcode (para iOS)
-- Android Studio (para Android)
-- CocoaPods (para iOS)
+- Xcode e CocoaPods (iOS)
+- Android Studio (Android)
+
+> Ambiente ainda não configurado? Siga o guia oficial: [React Native — Set Up Your Environment](https://reactnative.dev/docs/set-up-your-development-environment).
 
 ### Instalação
 
-1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/MeteoVision.git
+# 1. Clone o repositório
+git clone https://github.com/thiagossmarins/MeteoVision.git
 cd MeteoVision
-```
 
-2. Instale as dependências:
-```bash
+# 2. Instale as dependências
 npm install
-```
 
-3. Para iOS, instale os pods:
-```bash
+# 3. (iOS) Instale os pods
 cd ios && pod install && cd ..
 ```
 
 ### Executando
 
-**iOS:**
 ```bash
-npm run ios
+npm start          # Metro Bundler
+npm run ios        # iOS
+npm run android    # Android
 ```
 
-**Android:**
-```bash
-npm run android
+### Scripts
+
+| Comando | O que faz |
+| --- | --- |
+| `npm start` | Inicia o Metro Bundler |
+| `npm run ios` | Executa o app no iOS |
+| `npm run android` | Executa o app no Android |
+| `npm run lint` | Verifica problemas de linting |
+| `npm test` | Executa os testes |
+
+---
+
+## 🏗️ Arquitetura
+
+```text
+src/
+├── api/                  # Serviços de API
+│   ├── location/         #   Geocodificação e busca de cidades (Nominatim)
+│   └── weather/          #   Dados de clima (Open-Meteo)
+├── assets/               # Fontes, ícones SVG e imagens
+├── components/           # Componentes reutilizáveis
+│   ├── Box · Text · Button · Screen
+│   ├── GlassBox/             # Card com efeito glassmorphism
+│   ├── WeatherPage/          # Página de clima de uma localização
+│   ├── HourlyForecast/       # Previsão horária
+│   ├── DailyForecast/        # Previsão diária
+│   ├── SolarDeclination/     # Animação nascer/pôr do sol
+│   ├── UvIndexCard/          # Card de índice UV
+│   └── SavedLocationsMenu/   # Menu com localizações salvas
+├── hooks/                # useLocation, useWeather, useDynamicWeatherTheme,
+│                         # useAppTheme, useAppSafeArea, useMapSearch, useMapPin
+├── routes/               # Navegação
+├── screens/app/
+│   ├── WeatherScreen/        # Tela principal com pager
+│   └── MapScreen/            # Mapa interativo
+│       └── components/       #   MapSearchBar, MapLocationCard
+├── store/                # Zustand: localização, clima, salvas
+├── storage/              # Persistência com MMKV
+├── theme/                # Tema Restyle
+└── utils/                # Helpers de clima, UV, umidade e animação de voo
+maestro/
+└── demo_mapa.yaml        # Fluxo de demo automatizado
 ```
 
-**Iniciar Metro Bundler:**
+---
+
+## 🌐 APIs
+
+| Serviço | Uso |
+| --- | --- |
+| [**Open-Meteo**](https://open-meteo.com/) | Temperatura atual e aparente, previsão horária (24h) e diária (7 dias), índice UV, umidade relativa, nascer e pôr do sol |
+| [**OpenStreetMap Nominatim**](https://nominatim.org/) | Geocodificação reversa (coordenadas → cidade) e busca de cidades por nome, com até 5 resultados |
+
+---
+
+## 🤖 Testes automatizados
+
+O projeto usa [**Maestro**](https://maestro.mobile.dev/) para testes de UI e gravação de demos.
+
 ```bash
-npm start
-```
-
-## 📝 Scripts Disponíveis
-
-- `npm start` - Inicia o Metro Bundler
-- `npm run ios` - Executa o app no iOS
-- `npm run android` - Executa o app no Android
-- `npm run lint` - Verifica problemas de linting
-- `npm test` - Executa os testes
-
-## 🌐 APIs Utilizadas
-
-### Open-Meteo
-Obtém dados meteorológicos em tempo real:
-- Temperatura atual e aparente
-- Previsão horária (24h)
-- Previsão diária (7 dias)
-- Índice UV
-- Umidade relativa
-- Horários de nascer e pôr do sol
-
-### OpenStreetMap Nominatim API
-- Geocodificação reversa: coordenadas → nome de cidade
-- Busca de cidades por nome com até 5 resultados
-
-## 🤖 Testes Automatizados
-
-O projeto usa **Maestro** para testes de UI e gravação de demos.
-
-### Instalar Maestro
-```bash
+# Instalar o Maestro
 curl -Ls "https://get.maestro.mobile.dev" | bash
-```
 
-### Gravar demo do mapa
-```bash
-# Terminal 1 — inicia gravação
+# Terminal 1 — inicia a gravação
 xcrun simctl io booted recordVideo demo_mapa.mp4
 
 # Terminal 2 — executa o fluxo
 maestro test maestro/demo_mapa.yaml
 ```
 
-O fluxo cobre: abrir mapa → buscar cidade → animação de voo → salvar → swipe para a página salva.
-
-## 📄 Licença
-
-Este projeto está sob a licença privada.
-
-## 👨‍💻 Autor
-
-Desenvolvido por [Thiago Marins](https://www.linkedin.com/in/thiagossmarins/)
+O fluxo cobre: **abrir mapa → buscar cidade → animação de voo → salvar → swipe para a página salva**.
 
 ---
 
-⭐ Se você gostou deste projeto, considere dar uma estrela!
+## 📄 Licença
+
+Distribuído sob a licença [MIT](LICENSE).
+
+## 👨‍💻 Autor
+
+Desenvolvido por **[Thiago Marins](https://www.linkedin.com/in/thiagossmarins/)**.
+
+<div align="center">
+
+⭐ Se o projeto te ajudou ou te inspirou, deixe uma estrela!
+
+</div>
