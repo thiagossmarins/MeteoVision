@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="src/assets/images/MeteoVisionLogo.png" alt="MeteoVision" width="160"/>
+<img src="src/assets/images/SoraLogo.png" alt="Sora" width="160"/>
 
-# MeteoVision
+# Sora
 
 **Previsão do tempo moderna, fluida e elegante para iOS e Android.**
 
@@ -30,12 +30,6 @@ Clima em tempo real, mapa satélite interativo, localizações salvas e um tema 
 ---
 
 ## 🎬 Demo
-
-<div align="center">
-
-<img src="https://github.com/user-attachments/assets/697e959e-d0ec-4d5b-a56d-c681c0aa7a92" alt="MeteoVision Screenshot" width="300"/>
-
-</div>
 
 https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
 
@@ -103,8 +97,8 @@ https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/thiagossmarins/MeteoVision.git
-cd MeteoVision
+git clone https://github.com/thiagossmarins/Sora.git
+cd Sora
 
 # 2. Instale as dependências
 npm install
