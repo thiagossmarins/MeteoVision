@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="src/assets/images/SoraLogo.png" alt="Sora" width="160"/>
+<img src="src/assets/images/sora-logo.png" alt="sora" width="160"/>
 
-# Sora
+# sora
 
 **Previsão do tempo moderna, fluida e elegante para iOS e Android.**
 
@@ -97,8 +97,8 @@ https://github.com/user-attachments/assets/75cf8996-7105-4d73-a895-fcbe273b70a5
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/thiagossmarins/Sora.git
-cd Sora
+git clone https://github.com/thiagossmarins/sora.git
+cd sora
 
 # 2. Instale as dependências
 npm install

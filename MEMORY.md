@@ -4,7 +4,7 @@ Adoção da doutrina em 2026-10-21, núcleo v1.1.0.
 
 ## O que é
 
-Sora: app de previsão do tempo em React Native para iOS e Android, repositório de portfólio.
+sora: app de previsão do tempo em React Native para iOS e Android, repositório de portfólio.
 
 ## Estado atual
 
